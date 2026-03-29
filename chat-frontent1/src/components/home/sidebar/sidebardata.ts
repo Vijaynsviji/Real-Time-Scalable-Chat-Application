@@ -1,0 +1,60 @@
+
+
+export const staticContactData = [
+  {
+    id: 1,
+    Name: "Vijay N S",
+    LastMessage: "Hey, are we meeting today?",
+    date: "2026-02-24T09:15:00Z",
+    unReadMessageCount: 3,
+    isOnline: true,
+  },
+  {
+     id: 2,
+    Name: "Arjun R",
+    LastMessage: "Project build is failing on my side.",
+    date: "2026-02-24T08:40:00Z",
+    unReadMessageCount: 1,
+    isOnline: true,
+  },
+  {
+     id: 3,
+    Name: "Priya K",
+    LastMessage: "Can you review my PR?",
+    date: "2026-02-23T18:22:00Z",
+    unReadMessageCount: 0,
+    isOnline: false,
+  },
+  {
+     id: 4,
+    Name: "Sneha M",
+    LastMessage: "Let’s deploy it tomorrow morning.",
+    date: "2026-02-23T16:05:00Z",
+    unReadMessageCount: 5,
+    isOnline: false,
+  },
+  {
+     id: 5,
+    Name: "Rahul S",
+    LastMessage: "Shared the document with you.",
+    date: "2026-02-22T14:10:00Z",
+    unReadMessageCount: 2,
+    isOnline: true,
+  },
+  {
+     id: 6,
+    Name: "Ananya P",
+    LastMessage: "Thanks for the quick fix!",
+    date: "2026-02-21T20:45:00Z",
+    unReadMessageCount: 0,
+    isOnline: false,
+  },
+  {
+     id: 7,
+    Name: "Karthik V",
+    LastMessage: "Let’s catch up this weekend.",
+    date: "2026-02-20T11:30:00Z",
+    unReadMessageCount: 4,
+    isOnline: false,
+  },
+].map(item=>({...item,email: ""}));
