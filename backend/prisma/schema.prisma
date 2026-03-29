@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  user_id         String   @id 
+  first_name      String
+  last_name       String?
+  email           String   @unique
+  password        String
+  profileImageUrl String?
+  created_at      DateTime @default(now())
+
+  messages Messages[]
+  groupMembers   GroupMembers[]
+  conversation_participant ConversationParticipants[]
+}
+
+model Groups {
+  group_id          BigInt   @id @default(autoincrement())
+  group_name        String
+  group_profile_url String?
+  created_at        DateTime @default(now())
+
+  group_members GroupMembers[]
+}
+
+model GroupMembers {
+  group_member_id BigInt @id @default(autoincrement())
+  role            String
+
+  group_id BigInt
+  group    Groups @relation(fields: [group_id], references: [group_id])
+
+  group_user_id String
+  group_user    User   @relation(fields: [group_user_id], references: [user_id])
+
+  @@unique([group_id, group_user_id])
+}
+
+model Messages {
+  message_id      String   @id 
+  cipher_key      String
+  message_encrypt String
+  status          String
+  created_at      DateTime @default(now())
+
+  sender_id String
+  user      User   @relation(fields: [sender_id], references: [user_id])
+
+
+  conversation_id String
+  conversation    Conversation? @relation(name: "AllMessages", fields: [conversation_id], references: [conversation_id])
+
+
+  lastMessageOf Conversation? @relation("lastMessages")
+}
+
+model Conversation {
+  conversation_id String     @id 
+  type            String
+
+  messages        Messages[] @relation(name: "AllMessages")
+
+  last_message    Messages? @relation(name: "lastMessages", fields: [last_message_id], references: [message_id])
+  last_message_id String?   @unique 
+
+  participants ConversationParticipants[]
+}
+
+model ConversationParticipants {
+  participant_id String   @id 
+  created_at     DateTime @default(now())
+
+
+  user_id String @unique
+  user User @relation(fields: [user_id], references: [user_id])
+
+  conversation_id String?
+  conversation    Conversation? @relation(fields: [conversation_id], references: [conversation_id])
+}
