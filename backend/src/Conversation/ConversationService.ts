@@ -1,3 +1,4 @@
+import * as UserRepo from "../User/UserRepo.js";
 import { GetReturnMessageObject } from "../Utils/helperfunctions.js";
 import { Status } from "../Utils/types.js";
 
@@ -30,6 +31,11 @@ export const FetchConversationUsingId = async (conversation_id: string )=>{
 
 export const addConversation = async (user1: string , user2: string )=>{
     try{
+        const areUseridsValid = (await UserRepo.checkValidUserOrNot(user1)) && (await UserRepo.checkValidUserOrNot(user2));
+        if(!areUseridsValid){
+            return GetReturnMessageObject(404, Status.Error,null,"Given User Id's Are not Valid.");
+        }
+
         const AllConversationUserIdSet = new Set();
         const allConversationForGivenUserId = await ConversationRepo.getConversationParticipantUsingUserId(user1);
         allConversationForGivenUserId?.map(item=>{
@@ -39,11 +45,11 @@ export const addConversation = async (user1: string , user2: string )=>{
         })
 
         const allConversationForOtherUserId = await ConversationRepo.getConversationParticipantUsingUserId(user2);
-        allConversationForOtherUserId?.map(item=>{
+        for(let item of allConversationForOtherUserId){
             if(AllConversationUserIdSet.has(item?.conversation_id)){
                 return GetReturnMessageObject(404, Status.Error,null,"Already have an Conversation Record.");
             }
-        });
+        }
 
         const NewConversation = await ConversationRepo.SaveConversation(user1,user2);
 

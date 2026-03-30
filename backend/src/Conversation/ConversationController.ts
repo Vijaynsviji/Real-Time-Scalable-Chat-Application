@@ -9,7 +9,7 @@ export const GetAllConverationForParticularUser = async (req:any, res:any)=>{
         if(!req || !res) return null;
         const UserId = req.query.userId;
 
-        if(UserId){
+        if(!UserId){
             return res.status(404).json({
                 message: "Please Give Valid User Id."
             });
@@ -70,6 +70,11 @@ export const addConversation = async (req:any,res:any)=>{
             });
         }
         const addConversationResponse = await ConversationService.addConversation(UserIdData?.user1, UserIdData?.user2);
+
+        return res.status(200).json({
+            message: addConversationResponse?.statusText,
+            data: addConversationResponse?.data
+        })
     
     }catch(e){
         console.error("Error in addConversation " + e);
