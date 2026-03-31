@@ -37,7 +37,7 @@ export const GetConversationBasedOnId = async (req:any, res:any)=>{
         if(!req || !res) return null;
         const conversation_id = req.query.conversation_id;
 
-        if(conversation_id){
+        if(!conversation_id){
             return res.status(404).json({
                 message: "Please Give Valid conversation Id."
             });
