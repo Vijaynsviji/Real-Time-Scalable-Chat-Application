@@ -7,7 +7,7 @@ import * as ConversationService from './ConversationService.js';
 export const GetAllConverationForParticularUser = async (req:any, res:any)=>{
     try{
         if(!req || !res) return null;
-        const UserId = req.query.userId;
+        const UserId = req.params.userId;
 
         if(!UserId){
             return res.status(404).json({

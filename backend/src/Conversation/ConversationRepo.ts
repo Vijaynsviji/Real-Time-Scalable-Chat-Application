@@ -6,12 +6,31 @@ import { sendMessage } from "../Utils/redis.js";
 
 export const getAllConversationUsingUserId = async (UserId: string)=>{
     try{
-        const response =  prisma.conversationParticipants.findMany({
+        const response =  await prisma.conversationParticipants.findMany({
             where:{
-                conversation_id: UserId
+                user_id: UserId
+            },
+            select:{
+                user: {
+                    select: {
+                        user_id: true,
+                        email: true,
+                        first_name: true,
+                    }
+                },
+                conversation_id: true,
             }
         })
-        return response;
+
+        return response?.map(item=>{
+            return {
+                id:item?.user?.user_id,
+                isOnline: true,
+                email: item?.user?.email,
+                Name: item?.user?.first_name,
+                conversation_id: item?.conversation_id
+            }
+        });
     }catch(e){
         return false;
     }

@@ -1,7 +1,10 @@
 import { createClient } from "redis";
 
-const redis = createClient();
+const redis = createClient({
+    url: 'redis://localhost:6381'
+});
 export async function sendMessage(data:string) {
+  console.log(data);
   await redis.xAdd(
     "chat-stream",
     "*", // auto ID

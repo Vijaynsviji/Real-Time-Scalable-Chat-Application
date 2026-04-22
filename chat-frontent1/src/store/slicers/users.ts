@@ -13,10 +13,10 @@ const initialState = {
 }
 
 export const userSlice = createSlice({
-  name: 'counter',
+  name: 'currentUser',
   initialState: initialState,
   reducers: {
-    setCurrentUser: (state, action) => { state.currentUser += action.payload; },
+    setCurrentUser: (state, action) => { state.currentUser = action.payload; },
   },
 });
 

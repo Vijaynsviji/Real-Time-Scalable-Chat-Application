@@ -26,7 +26,7 @@ export const SaveNewMessageForConversationId = async (conversation_id:string,Mes
     try{
 
         const AllMessages  = await MessageRepo.SaveNewMessageBasedOnConversationId(conversation_id,MessageData);
-        return GetReturnMessageObject(200, Status.Success,AllMessages,"Message Fetch Succes.");
+        return GetReturnMessageObject(200, Status.Success,AllMessages,"Message Saved Succes.");
     }catch(e){
         console.error("Error in signupUser " + e);
         return GetReturnMessageObject(500, Status.Error,null,"Some thing went wrong!!!")

@@ -8,7 +8,7 @@ const proxy = httpProxy.createProxyServer();
 const servers = [
   "ws://localhost:8081",
   "ws://localhost:8082",
-  "ws://localhost:8083"
+  // "ws://localhost:8083"
 ];
 
 let index = 0;

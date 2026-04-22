@@ -34,7 +34,7 @@ export const SaveConversation = async (conversation:any)=>{
         const responseUser1 = await prisma.conversationParticipants.create({
             data: {
                 participant_id: conversation?.firstParticipant_id,
-                user_id: conversation?.user_id,
+                user_id: conversation?.user_id1,
                 conversation_id: conversation?.conversation_id
             }
         });
@@ -42,7 +42,7 @@ export const SaveConversation = async (conversation:any)=>{
         const responseUser2  = await prisma.conversationParticipants.create({
             data: {
                 participant_id: conversation?.secondParticipant_id,
-                user_id: conversation?.user_id,
+                user_id: conversation?.user_id2,
                 conversation_id: newConversation.conversation_id
             }
         })

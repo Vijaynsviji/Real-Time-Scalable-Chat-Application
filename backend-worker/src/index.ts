@@ -10,7 +10,6 @@ const redis = createClient({
 async function startWorker() {
   const workerName = "worker-1";
 
-
   console.log("Above While Loop");
 
   while (true) {
@@ -30,31 +29,31 @@ async function startWorker() {
 
     if (!response) continue;
 
+    console.log(response);
+
     
 
     if(!Array.isArray(response)) continue;
     for (const stream of response) {
         if(!stream || typeof stream != 'object') continue;
-        if(!("messages" in stream) || stream?.messages ||  !Array.isArray(stream?.messages)) continue;
-      for (const message of stream.messages) {
+        if(!("messages" in stream) || !stream?.messages ||  !Array.isArray(stream?.messages)) continue;
+        console.log("Time message", stream.messages);
+        for (const message of stream.messages) {
+
+          if(!message || typeof message !="object" || !("message" in message)) continue;
+          
+          const data = safeJSONParse<any>(message?.message,{});
+
+          // 👉 Save to DB here
+          // await saveToDB(data);
+
+          await AssignJob(data);
 
 
-        if(!message || typeof message !="object" || !("message" in message)) continue;
-        
-        const data = safeJSONParse<any>(message?.message,{});
-
-        console.log("Processing:", data);
-
-        // 👉 Save to DB here
-        // await saveToDB(data);
-
-        await AssignJob(data);
-
-
-        if(!message || !("id" in message) || !message.id) continue;
-        // ACK after success
-        await redis.xAck("chat-stream", "workers", message.id as any);
-      }
+          if(!message || !("id" in message) || !message.id) continue;
+          // ACK after success
+          await redis.xAck("chat-stream", "workers", message.id as any);
+        }
     }
   }
 }

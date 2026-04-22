@@ -6,17 +6,42 @@ import type { Message } from "../../utils/types/Types";
 import { safeJSONParse } from "../../utils/HelperFunctions";
 import type { Contact } from "./sidebar/contactlist";
 import { messageData } from "./messageview/messagedata";
+import axios from "axios";
+import { apiBaseUrl } from "../../config/api";
+import { useSelector } from "react-redux";
 
 
 export default function Home(){
     const {socketObject} = useVerifyUser();
     const [selectedContact,setSelectedContact] = React.useState<Contact | null>(null);
     const [messages,setMessages] = React.useState<Message[]>([]);
+     const currentUserDetails = useSelector((state:any)=> state?.user?.currentUser);
 
 
-    const handleChangeSelectedContact = (contact:Contact | null)=>{
-        if(contact==null || contact==undefined) return;
-        setSelectedContact(contact);
+    const handleChangeSelectedContact = async (contact:Contact | null)=>{
+        try{
+            if(contact==null || contact==undefined) return;
+            setSelectedContact(contact);
+    
+            if(!contact?.conversation_id){
+                const response = await axios.post( apiBaseUrl + "/conversation", {
+                    user1: currentUserDetails?.user_id || currentUserDetails?.data?.user_id,
+                    user2: contact?.id
+                })
+
+                if(response?.status){
+                    const data = response?.data;
+                    const conversation_id = data?.conversation_id;
+                    if(!conversation_id) return;
+                    setSelectedContact((prev)=>{
+                        if(!prev) return prev;
+                        return {...prev, conversation_id: conversation_id}
+                    })
+                }
+            }
+        }catch(e){
+            console.error("Error in handleChangeSelectedContact " + e);
+        }
     }
 
     React.useEffect(()=>{
