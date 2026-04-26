@@ -8,7 +8,7 @@ interface ContactCard extends ContactCardProp{
     onClickContact: (contact:Contact)=>void
 }
 
-function ContactCard({isSelected,lastMessage,lastMessageDate,unReadMessageCount,Name,isOnline=false,id,onClickContact}:ContactCard) {
+function ContactCard({isSelected,email,conversation_id,lastMessage,messages,lastMessageDate,unReadMessageCount,Name,isOnline=false,id,onClickContact}:ContactCard) {
     const date = new Date();
     const formattedDate = lastMessageDate? moment(lastMessageDate).format('MM/DD/YY'): ""; 
     const numberOfUnReadMessage = typeof unReadMessageCount === "number" ? unReadMessageCount.toString() : unReadMessageCount;
@@ -18,14 +18,16 @@ function ContactCard({isSelected,lastMessage,lastMessageDate,unReadMessageCount,
     const CurrentContact:Contact = {
         id: id,
         Name: Name,
-        email: id?.toLocaleString() || "",
-        isOnline: isOnline
+        email: email || "",
+        isOnline: isOnline,
+        messages: messages,
+        conversation_id: conversation_id || null,
     }
     
   return (
     <div className={cardClassName} onClick={()=>onClickContact(CurrentContact)}>
         <div className='flex gap-[10px] items-center'>
-            <AvatarComp size={{ width: "100%"}} isOnline={isOnline} />
+            <AvatarComp size={{ width: 56, height: 56 }} isOnline={isOnline} />
             <div className='flex flex-col gap-[10px]'>
                 <p className='font-bold lg:text-xl text-md'>{Name}</p>
                 <p className='text-[var(--secondary-text)] lg:text-md text-sm'>{lastMessage}</p>

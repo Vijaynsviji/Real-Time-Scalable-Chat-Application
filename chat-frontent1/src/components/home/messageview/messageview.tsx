@@ -6,6 +6,7 @@ import type { Message } from '../../../utils/types/Types';
 import { messageData } from './messagedata';
 import type { Contact } from '../sidebar/contactlist';
 import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from "uuid";
 
 
 interface MessageView{
@@ -22,25 +23,26 @@ function MessageView({handleAddNewMessage,selectedContact,messages,socketObject}
   // const dispatch = useDispatch();
 
 
-  const sendMessage = (newMessage:Message)=>{
+  const sendMessage = (messageText:string)=>{
     try{
 
-      if(!newMessage) return;
-      const OriginalMessage = {...newMessage};
+      if(!messageText) return;
 
       if(!socketObject || !selectedContact) return;
 
-      newMessage.person = currentUser?.Name;
-      newMessage.date = new Date();
-      newMessage.id = selectedContact.email;
-
-      const messageObject = {
-        user_email: selectedContact?.email,
-        message: newMessage,
+      const messageObject:Message = {
+        message_id:  uuidv4(),
+        cipher_key: "",
+        message_encrypt: messageText,
+        status: "sent",
+        created_at: new Date(),
+        sender_id: currentUser?.user_id || currentUser?.data?.user_id,
+        conversation_id: selectedContact?.conversation_id || ""
       };
-      socketObject.send(JSON.stringify(messageObject));
+      
+      socketObject.send(JSON.stringify({...messageObject,user_email: selectedContact?.email}));
 
-      handleAddNewMessage(OriginalMessage);
+      handleAddNewMessage(messageObject);
 
     }catch(e){
       console.error("Error in sendMessage " + e);

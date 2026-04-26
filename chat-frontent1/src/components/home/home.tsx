@@ -8,7 +8,8 @@ import type { Contact } from "./sidebar/contactlist";
 import { messageData } from "./messageview/messagedata";
 import axios from "axios";
 import { apiBaseUrl } from "../../config/api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setConversationMessages } from "../../store/slicers/conversation";
 
 
 export default function Home(){
@@ -16,11 +17,13 @@ export default function Home(){
     const [selectedContact,setSelectedContact] = React.useState<Contact | null>(null);
     const [messages,setMessages] = React.useState<Message[]>([]);
      const currentUserDetails = useSelector((state:any)=> state?.user?.currentUser);
+     const dispatch = useDispatch();
 
 
     const handleChangeSelectedContact = async (contact:Contact | null)=>{
         try{
             if(contact==null || contact==undefined) return;
+            setMessages(contact?.messages || []);
             setSelectedContact(contact);
     
             if(!contact?.conversation_id){
@@ -49,9 +52,28 @@ export default function Home(){
             socketObject.onmessage = (e)=>{
                 const data = e?.data;
                 const parsedData = safeJSONParse<any>(data,{});
-                const MessageData = parsedData?.message;
-                
-                setMessages(prev=>[...prev,MessageData]);
+                const MessageData = parsedData;
+
+                const messageObject:Message = {
+                    message_id:  MessageData?.message_id,
+                    cipher_key: MessageData?.cipher_key,
+                    message_encrypt: MessageData?.message_encrypt,
+                    status: MessageData?.status,
+                    created_at: MessageData?.created_at,
+                    sender_id: MessageData?.sender_id,
+                    conversation_id: MessageData?.conversation_id
+                };
+
+                const payload = {
+                    conversation_id: messageObject?.conversation_id,
+                    message: messageObject
+                }
+
+                 if(selectedContact?.conversation_id == MessageData?.conversation_id){
+                    setMessages(prev=>[...prev,MessageData]);
+                }
+
+                dispatch(setConversationMessages(payload));
         
             };
         }
@@ -64,6 +86,12 @@ export default function Home(){
 
     const handleAddNewMessage = (newMessage:Message)=>{
         setMessages(prev=>[...prev,newMessage]);
+        const payload = {
+            conversation_id: newMessage?.conversation_id,
+            message: newMessage
+        }
+
+        dispatch(setConversationMessages(payload));
     }
 
 
@@ -72,11 +100,11 @@ export default function Home(){
     return <div className="bg-[var(--light-color-100)] box-border">
         <div className="border-[2px] box-border border-solid border-[var(--border)] h-[calc(100vh-40px)] m-[20px] rounded-[20px] grid grid-cols-[1fr] md:grid-cols-[1fr_2fr]">
             <div className="box-border hidden md:flex flex-col overflow-hidden border-r-[2px] border-[var(--border)]"><SideBar selectedContact={selectedContact} handleChangeSelectedContact={handleChangeSelectedContact} /></div>
-            <div className="box-border hidden md:flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact}  socketObject={socketObject} messages={messageData} /></div>
+            <div className="box-border hidden md:flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact}  socketObject={socketObject} messages={messages} /></div>
 
 
             {!selectedContact && <div className="box-border flex md:hidden flex-col overflow-hidden border-r-[2px] border-[var(--border)]"><SideBar selectedContact={selectedContact} handleChangeSelectedContact={handleChangeSelectedContact} /></div>}
-            {selectedContact && <div className="box-border md:hidden flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact}  socketObject={socketObject} messages={messageData} /></div>}
+            {selectedContact && <div className="box-border md:hidden flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact}  socketObject={socketObject} messages={messages} /></div>}
 
         </div>
     </div>

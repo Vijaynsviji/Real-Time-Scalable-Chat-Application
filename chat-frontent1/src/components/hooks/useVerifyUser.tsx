@@ -34,8 +34,8 @@ function useVerifyUser() {
             if(socket){
                 setSocketObject(socket);
             }
-            const currentUser:CurrentUser = response?.data;
-            dispatch(setCurrentUser(currentUser));
+            const currentUser = response?.data;
+            dispatch(setCurrentUser(currentUser?.data));
         }catch(e){
             console.error(e);
             navigate('/signin');

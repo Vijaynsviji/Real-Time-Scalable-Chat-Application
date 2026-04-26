@@ -8,8 +8,11 @@ import type { webSocketMessage } from "./types.js";
 
 
 
-const wss = new WebSocketServer({ port: 8081 });
-const channelName = "Server1";
+const wss = new WebSocketServer({ port: 8082 });
+const redisWorker = createClient({
+    url: 'redis://localhost:6381'
+});
+const channelName = "Server2";
 let redisClient: ReturnType<typeof createClient>;
 const UserSocketMap = new Map();
 
@@ -69,6 +72,28 @@ async function onUserSendMessage(message:string,ws:WebSocket){
 
     await redisClient.publish(channelName,message);
 
+    const jobData = {
+      message_id: parseMessage?.message_id,
+      cipher_key: parseMessage?.cipher_key,
+      message_encrypt: parseMessage?.message_encrypt,
+      status: parseMessage?.status,
+      sender_id: parseMessage?.sender_id,
+      conversation_id: parseMessage?.conversation_id
+    }
+
+    const StringifiedResponse = JSON.stringify({
+            type: "SaveMessage",
+            Data: jobData
+        })
+
+    await redisWorker.xAdd(
+        "chat-stream",
+        "*", // auto ID
+        {
+          message: StringifiedResponse
+        }
+      );
+
     console.log("onUserSendMessage: ",parseMessage);
 
     
@@ -101,6 +126,7 @@ async function onReceivedMessage(message:string){
 
 async function startSockerServer() {
   try {
+    await redisWorker.connect();
      redisClient = await createClient();
      redisClient.connect();
      const redisClientForSubScribe = await createClient();

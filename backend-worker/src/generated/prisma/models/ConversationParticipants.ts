@@ -189,15 +189,15 @@ export type ConversationParticipantsOrderByWithRelationInput = {
 
 export type ConversationParticipantsWhereUniqueInput = Prisma.AtLeast<{
   participant_id?: string
-  user_id?: string
   AND?: Prisma.ConversationParticipantsWhereInput | Prisma.ConversationParticipantsWhereInput[]
   OR?: Prisma.ConversationParticipantsWhereInput[]
   NOT?: Prisma.ConversationParticipantsWhereInput | Prisma.ConversationParticipantsWhereInput[]
   created_at?: Prisma.DateTimeFilter<"ConversationParticipants"> | Date | string
+  user_id?: Prisma.StringFilter<"ConversationParticipants"> | string
   conversation_id?: Prisma.StringNullableFilter<"ConversationParticipants"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   conversation?: Prisma.XOR<Prisma.ConversationNullableScalarRelationFilter, Prisma.ConversationWhereInput> | null
-}, "participant_id" | "user_id">
+}, "participant_id">
 
 export type ConversationParticipantsOrderByWithAggregationInput = {
   participant_id?: Prisma.SortOrder

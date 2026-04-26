@@ -43,7 +43,7 @@ export const SaveConversation = async (conversation:any)=>{
             data: {
                 participant_id: conversation?.secondParticipant_id,
                 user_id: conversation?.user_id2,
-                conversation_id: newConversation.conversation_id
+                conversation_id: conversation.conversation_id
             }
         })
 

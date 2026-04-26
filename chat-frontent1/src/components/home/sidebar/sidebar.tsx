@@ -7,7 +7,8 @@ import axios from "axios";
 import { apiBaseUrl } from "../../../config/api";
 import NewChat from "./newchat/newchat";
 import { staticContactData } from "./sidebardata";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setConversations } from "../../../store/slicers/conversation";
 
 
 interface SideBar{
@@ -23,6 +24,7 @@ export default function SideBar({handleChangeSelectedContact,selectedContact}:Si
     const [allUsers,setAllUsers] = React.useState([]);
     const [showSearchContact,setShowSearchContact] = React.useState(false);
     const currentUserDetails = useSelector((state:any)=> state?.user?.currentUser);
+    const dispatch = useDispatch();
 
 
     const handleCloseNewContact = ()=>{
@@ -47,6 +49,14 @@ export default function SideBar({handleChangeSelectedContact,selectedContact}:Si
             if(response.status==200){
                 const conversationList = response?.data;
                 setSearchedContact(conversationList?.data);
+
+                const conversationMap:any = {};
+                if(conversationList?.data){
+                    for(let item of conversationList?.data){
+                        conversationMap[item?.id] = item
+                    }
+                }
+                dispatch(setConversations(conversationMap));
             }
         }catch(e){
             console.error("Error in FetchAllConversation " + e);

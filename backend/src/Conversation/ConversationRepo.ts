@@ -19,18 +19,41 @@ export const getAllConversationUsingUserId = async (UserId: string)=>{
                     }
                 },
                 conversation_id: true,
+                conversation:{
+                    select:{
+                        type: true,
+                        messages: true,
+                        last_message: true,
+                        last_message_id: true,
+                        participants: {
+                            select: {
+                                user: true
+                            }
+                        },
+                    }
+                }
             }
         })
 
-        return response?.map(item=>{
-            return {
-                id:item?.user?.user_id,
-                isOnline: true,
-                email: item?.user?.email,
-                Name: item?.user?.first_name,
-                conversation_id: item?.conversation_id
+        const conversationData = response?.map(item=>{
+            if(!item?.conversation?.participants || !Array.isArray(item?.conversation?.participants)) return null;
+            const participant = item?.conversation?.participants?.filter(participant=>participant.user.user_id!=UserId);
+            if(participant && participant?.length>0){
+                return {
+                    id: participant?.[0]?.user?.user_id,
+                    conversation_id: item?.conversation_id,
+                    email: participant?.[0]?.user?.email,
+                    Name: participant?.[0]?.user?.first_name,
+                    isOnline: true,
+                    messages: item?.conversation?.messages
+                }
             }
-        });
+            return null;
+        }).filter(Boolean)
+
+        
+
+        return conversationData || [];
     }catch(e){
         return false;
     }

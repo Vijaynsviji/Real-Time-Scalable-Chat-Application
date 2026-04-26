@@ -3,7 +3,7 @@
 import React from 'react'
 import ContactCard from './contactcard'
 import { staticContactData } from './sidebardata';
-import type { Status } from '../../../utils/types/Types';
+import type { Message, Status } from '../../../utils/types/Types';
 
 
 
@@ -14,7 +14,8 @@ export interface Contact{
   isOnline: boolean,
   email:string | null,
   Name: string,
-  conversation_id?: string | null
+  conversation_id?: string | null,
+  messages?: Message[] | null,
 }
 
 
@@ -38,7 +39,7 @@ function ContactList({allUserConverations,handleChangeSelectedContact,selectedCo
     <div className='overflow-y-scroll h-[100%]'>
       <div className='flex flex-col'>
         {allUserConverations && allUserConverations?.map(item=>{
-          return <ContactCard email={item?.email} key={item?.id} id={item?.id || null} onClickContact={handleChangeSelectedContact}  isOnline={item?.isOnline} Name={item?.Name} unReadMessageCount={item?.unReadMessageCount} lastMessage={item?.lastMessage} lastMessageDate={item?.lastMessageDate} isSelected={selectedContact?.email==item?.email}/>
+          return <ContactCard conversation_id={item?.conversation_id} email={item?.email} key={item?.id} id={item?.id || null} messages={item?.messages} onClickContact={handleChangeSelectedContact}  isOnline={item?.isOnline} Name={item?.Name} unReadMessageCount={item?.unReadMessageCount} lastMessage={item?.lastMessage} lastMessageDate={item?.lastMessageDate} isSelected={selectedContact?.email==item?.email}/>
         })}
       </div>
       

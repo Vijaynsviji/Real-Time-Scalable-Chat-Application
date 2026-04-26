@@ -7,14 +7,17 @@ import type { Message } from "../../../utils/types/Types";
 import { IconButton } from "@mui/material";
 
 import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
 
 interface MessageInput {
-  sendMessage: (messsage: Message) => void;
+  sendMessage: (messsage: string) => void;
 }
 
 function MessageInput({ sendMessage }: MessageInput) {
   const [message, setMessage] = React.useState("");
   const [isTyping, setIsTyping] = React.useState(false);
+  const currentUser = useSelector((state:any) => state?.user?.currentUser);
+
 
   const handleChangeMessage = (newValue: string) => {
     if(!newValue && newValue.length==0) setIsTyping(false);
@@ -25,14 +28,7 @@ function MessageInput({ sendMessage }: MessageInput) {
   };
 
   const handleSendMessage = () => {
-    const newMessage:Message = {
-      id: uuidv4(),
-      text: message,
-      person: "You",
-      date: new Date(),
-      status: "sent",
-    };
-    sendMessage(newMessage);
+    sendMessage(message);
     setMessage("");
     setIsTyping(false)
   };
