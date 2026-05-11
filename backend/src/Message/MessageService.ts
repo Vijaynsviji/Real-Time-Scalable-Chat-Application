@@ -21,6 +21,19 @@ export const FetchAllMessagesForConversationId = async (conversation_id:string)=
     }
 }
 
+export const FetchPaginatedMessagesForConversationId = async (conversation_id:string,lastMessage_id:string,pagination_value: number)=>{
+    try{
+
+        const AllMessages  = await MessageRepo.GetPaginatedMessageBasedOnConversationId(conversation_id,lastMessage_id,pagination_value);
+        return GetReturnMessageObject(200, Status.Success,AllMessages,"Message Fetch Succes.");
+    }catch(e){
+        console.error("Error in signupUser " + e);
+        return GetReturnMessageObject(500, Status.Error,null,"Some thing went wrong!!!")
+    }
+}
+
+
+
 
 export const SaveNewMessageForConversationId = async (conversation_id:string,MessageData: MessageBody)=>{
     try{

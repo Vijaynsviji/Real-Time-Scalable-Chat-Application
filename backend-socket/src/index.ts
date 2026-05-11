@@ -8,11 +8,11 @@ import type { webSocketMessage } from "./types.js";
 
 
 
-const wss = new WebSocketServer({ port: 8082 });
+const wss = new WebSocketServer({ port: 8081 });
 const redisWorker = createClient({
     url: 'redis://localhost:6381'
 });
-const channelName = "Server2";
+const channelName = "Server1";
 let redisClient: ReturnType<typeof createClient>;
 const UserSocketMap = new Map();
 
@@ -78,7 +78,8 @@ async function onUserSendMessage(message:string,ws:WebSocket){
       message_encrypt: parseMessage?.message_encrypt,
       status: parseMessage?.status,
       sender_id: parseMessage?.sender_id,
-      conversation_id: parseMessage?.conversation_id
+      conversation_id: parseMessage?.conversation_id,
+      created_at: parseMessage?.created_at
     }
 
     const StringifiedResponse = JSON.stringify({

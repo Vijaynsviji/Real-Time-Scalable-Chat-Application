@@ -5,16 +5,16 @@ import SideBar from "./sidebar/sidebar";
 import type { Message } from "../../utils/types/Types";
 import { safeJSONParse } from "../../utils/HelperFunctions";
 import type { Contact } from "./sidebar/contactlist";
-import { messageData } from "./messageview/messagedata";
 import axios from "axios";
 import { apiBaseUrl } from "../../config/api";
 import { useDispatch, useSelector } from "react-redux";
-import { setConversationMessages } from "../../store/slicers/conversation";
+import { setConversationMessages, setSelectedStoreContact } from "../../store/slicers/conversation";
+import {useGetSet} from 'react-use';
 
 
 export default function Home(){
     const {socketObject} = useVerifyUser();
-    const [selectedContact,setSelectedContact] = React.useState<Contact | null>(null);
+    const [selectedContact,setSelectedContact] = useGetSet<Contact | null>(null);
     const [messages,setMessages] = React.useState<Message[]>([]);
      const currentUserDetails = useSelector((state:any)=> state?.user?.currentUser);
      const dispatch = useDispatch();
@@ -25,6 +25,7 @@ export default function Home(){
             if(contact==null || contact==undefined) return;
             setMessages(contact?.messages || []);
             setSelectedContact(contact);
+            dispatch(setSelectedStoreContact({selectedContact:contact}))
     
             if(!contact?.conversation_id){
                 const response = await axios.post( apiBaseUrl + "/conversation", {
@@ -69,7 +70,7 @@ export default function Home(){
                     message: messageObject
                 }
 
-                 if(selectedContact?.conversation_id == MessageData?.conversation_id){
+                 if(selectedContact()?.conversation_id == MessageData?.conversation_id){
                     setMessages(prev=>[...prev,MessageData]);
                 }
 
@@ -99,12 +100,12 @@ export default function Home(){
 
     return <div className="bg-[var(--light-color-100)] box-border">
         <div className="border-[2px] box-border border-solid border-[var(--border)] h-[calc(100vh-40px)] m-[20px] rounded-[20px] grid grid-cols-[1fr] md:grid-cols-[1fr_2fr]">
-            <div className="box-border hidden md:flex flex-col overflow-hidden border-r-[2px] border-[var(--border)]"><SideBar selectedContact={selectedContact} handleChangeSelectedContact={handleChangeSelectedContact} /></div>
-            <div className="box-border hidden md:flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact}  socketObject={socketObject} messages={messages} /></div>
+            <div className="box-border hidden md:flex flex-col overflow-hidden border-r-[2px] border-[var(--border)]"><SideBar selectedContact={selectedContact()} handleChangeSelectedContact={handleChangeSelectedContact} /></div>
+            <div className="box-border hidden md:flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact()}  socketObject={socketObject} messages={messages} /></div>
 
 
             {!selectedContact && <div className="box-border flex md:hidden flex-col overflow-hidden border-r-[2px] border-[var(--border)]"><SideBar selectedContact={selectedContact} handleChangeSelectedContact={handleChangeSelectedContact} /></div>}
-            {selectedContact && <div className="box-border md:hidden flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact}  socketObject={socketObject} messages={messages} /></div>}
+            {selectedContact && <div className="box-border md:hidden flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact()}  socketObject={socketObject} messages={messages} /></div>}
 
         </div>
     </div>

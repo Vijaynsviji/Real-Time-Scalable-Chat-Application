@@ -21,7 +21,7 @@ export interface Contact{
 
 export interface ContactCardProp extends Contact{
   unReadMessageCount?: number,
-  lastMessage?: string,
+  lastMessage?: Message,
   lastMessageDate?: Date
 }
 

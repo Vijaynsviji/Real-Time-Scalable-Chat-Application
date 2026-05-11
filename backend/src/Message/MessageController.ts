@@ -1,11 +1,12 @@
 
+import { parseNumber } from '../Utils/helperfunctions.js';
 import { MessageBodySchema } from './MessageSchema.js';
 import * as MessageService from './MessageService.js';
 
 export const GetAllMessages = async (req:any, res:any)=>{
     try{
         if(!req || !res) return null;
-        const conversation_id = req?.query?.conversation_id;
+        const conversation_id = req?.params?.conversation_id;
 
         if(!conversation_id){
             return res.status(404).json({
@@ -23,6 +24,33 @@ export const GetAllMessages = async (req:any, res:any)=>{
     }catch(e){
         console.error("Error in GetAllMessages " + e);
         return res.status(500).json({
+            message: "Some thing went wrong",
+            data: null
+        })
+    }
+}
+
+export const GetMessageBasedOnPagination =  async (req:any, res:any)=>{
+    try{
+        if(!req || !res) return null;
+        const conversation_id = req?.params?.conversation_id;
+        const lastMessageId = req?.query?.last_message_id;
+        const paginationValue = req?.query?.paginationValue;
+        if(!conversation_id || !lastMessageId || !paginationValue){
+            return res.status(404).json({
+                message: "Please Give Validate your inputs."
+            });
+        }
+
+        const allMessagesList = await MessageService?.FetchPaginatedMessagesForConversationId(conversation_id,lastMessageId,parseNumber(paginationValue));
+
+         return res.status(allMessagesList?.statusCode).json({
+            message: allMessagesList?.statusText,
+            data: allMessagesList?.data
+        })
+    }catch(e){
+        console.error("Error in GetMessageBasedOnPagination " + e);
+         return res.status(500).json({
             message: "Some thing went wrong",
             data: null
         })

@@ -11,6 +11,6 @@ export type Message = {
     message_encrypt: string,
     sender_id?: string,
     conversation_id?: string,
-    created_at: Date,
+    created_at: Date | string,
     status : Status
 }

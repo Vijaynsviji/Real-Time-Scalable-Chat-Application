@@ -24,6 +24,30 @@ export const GetMessageBasedOnConversationId = async(conversation_id:string)=>{
     }
 }
 
+export const GetPaginatedMessageBasedOnConversationId = async(conversation_id:string,lastMessage_id:string,pagination_value: number)=>{
+    try{
+        const allMessages = await prisma.messages.findMany({
+            where:{
+                conversation_id: conversation_id
+            },
+            take: 20,
+            skip: pagination_value,
+            cursor: {
+                message_id: lastMessage_id
+            },
+            orderBy: {
+                message_id: 'desc'
+            }
+        });
+
+        return allMessages;
+    }catch(e){
+        return [];
+    }
+}
+
+
+
 
 export const SaveNewMessageBasedOnConversationId = async(conversation_id:string,MessageData: MessageBody)=>{
     try{

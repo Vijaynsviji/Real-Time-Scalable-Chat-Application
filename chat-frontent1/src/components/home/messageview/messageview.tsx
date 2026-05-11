@@ -6,7 +6,7 @@ import type { Message } from '../../../utils/types/Types';
 import { messageData } from './messagedata';
 import type { Contact } from '../sidebar/contactlist';
 import { useSelector } from 'react-redux';
-import { v4 as uuidv4 } from "uuid";
+import { v7  } from "uuid";
 
 
 interface MessageView{
@@ -31,11 +31,11 @@ function MessageView({handleAddNewMessage,selectedContact,messages,socketObject}
       if(!socketObject || !selectedContact) return;
 
       const messageObject:Message = {
-        message_id:  uuidv4(),
+        message_id:  v7(),
         cipher_key: "",
         message_encrypt: messageText,
         status: "sent",
-        created_at: new Date(),
+        created_at: new Date().toISOString(),
         sender_id: currentUser?.user_id || currentUser?.data?.user_id,
         conversation_id: selectedContact?.conversation_id || ""
       };

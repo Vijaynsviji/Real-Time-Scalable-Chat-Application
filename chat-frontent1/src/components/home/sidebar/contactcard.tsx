@@ -30,7 +30,7 @@ function ContactCard({isSelected,email,conversation_id,lastMessage,messages,last
             <AvatarComp size={{ width: 56, height: 56 }} isOnline={isOnline} />
             <div className='flex flex-col gap-[10px]'>
                 <p className='font-bold lg:text-xl text-md'>{Name}</p>
-                <p className='text-[var(--secondary-text)] lg:text-md text-sm'>{lastMessage}</p>
+                <p className='text-[var(--secondary-text)] lg:text-md text-sm'>{lastMessage?.message_encrypt || ""}</p>
             </div>
         </div>
         <div className='flex flex-col items-end gap-[10px]'>

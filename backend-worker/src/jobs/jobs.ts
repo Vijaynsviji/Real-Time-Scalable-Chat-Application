@@ -69,7 +69,17 @@ export const SaveNewMessageBasedOnConversationId = async (message:any)=>{
                 message_encrypt: message?.message_encrypt,
                 status: message?.status,
                 sender_id: message?.sender_id,
+                conversation_id: message?.conversation_id,
+                created_at: new Date(message?.created_at)
+            }
+        })
+
+        const conversationResponse = await prisma.conversation.update({
+            where: {
                 conversation_id: message?.conversation_id
+            },
+            data: {
+                last_message_id: message?.message_id,
             }
         })
 

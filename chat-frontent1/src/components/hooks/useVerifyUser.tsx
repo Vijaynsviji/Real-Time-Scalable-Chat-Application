@@ -5,7 +5,7 @@
 import axios from 'axios';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import { apiBaseUrl } from '../../config/api';
+import { apiBaseUrl, wsAPIBaseURL } from '../../config/api';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser, type CurrentUser } from '../../store/slicers/users';
 
@@ -29,7 +29,7 @@ function useVerifyUser() {
                 navigate('/signin');
             }
 
-            const socket = new WebSocket('ws://192.168.0.185:8050?token=' + token);
+            const socket = new WebSocket(`${wsAPIBaseURL}?token=` + token);
 
             if(socket){
                 setSocketObject(socket);

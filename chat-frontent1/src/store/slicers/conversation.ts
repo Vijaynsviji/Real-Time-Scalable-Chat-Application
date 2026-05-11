@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { ContactCardProp } from '../../components/home/sidebar/contactlist';
+import type { Contact, ContactCardProp } from '../../components/home/sidebar/contactlist';
 import type { Message } from '../../utils/types/Types';
 
 
@@ -10,6 +10,7 @@ interface ConversationMap {
 
 const initialState = {
     conversations: {} as ConversationMap,
+    selectedContact: {} as Contact | null
 }
 
 export const ConversationSlice = createSlice({
@@ -30,9 +31,12 @@ export const ConversationSlice = createSlice({
                 ...currentConversation
             }
         }
+    },
+    setSelectedStoreContact: (state,action)=>{
+        state.selectedContact = action.payload.selectedContact;
     }
   },
 });
 
-export const { setConversations,setConversationMessages } = ConversationSlice.actions;
+export const { setConversations,setConversationMessages,setSelectedStoreContact } = ConversationSlice.actions;
 export default ConversationSlice.reducer;

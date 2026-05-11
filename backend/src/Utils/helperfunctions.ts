@@ -31,5 +31,15 @@ export const setupBigIntSerialization = () => {
   };
 };
 
+export function parseNumber(value:string | number,defaultValue=0){
+  try{
+    if(!value) return defaultValue;
+    if(typeof value == 'string') return Number(value);
+    return value ?? defaultValue;
+  }catch(e){
+    return defaultValue;
+  }
+}
+
 
 

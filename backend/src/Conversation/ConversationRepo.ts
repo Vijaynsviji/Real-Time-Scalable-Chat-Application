@@ -22,8 +22,13 @@ export const getAllConversationUsingUserId = async (UserId: string)=>{
                 conversation:{
                     select:{
                         type: true,
-                        messages: true,
                         last_message: true,
+                         messages: {
+                            take: 20,
+                            orderBy: {
+                                message_id: "desc",
+                            },
+                        },
                         last_message_id: true,
                         participants: {
                             select: {
@@ -31,7 +36,8 @@ export const getAllConversationUsingUserId = async (UserId: string)=>{
                             }
                         },
                     }
-                }
+                },
+                
             }
         })
 
@@ -45,7 +51,8 @@ export const getAllConversationUsingUserId = async (UserId: string)=>{
                     email: participant?.[0]?.user?.email,
                     Name: participant?.[0]?.user?.first_name,
                     isOnline: true,
-                    messages: item?.conversation?.messages
+                    messages: item?.conversation?.messages,
+                    lastMessage: item?.conversation?.last_message
                 }
             }
             return null;
