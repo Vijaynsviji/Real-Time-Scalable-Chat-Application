@@ -53,6 +53,7 @@ async function startWorker() {
           if(!message || !("id" in message) || !message.id) continue;
           // ACK after success
           await redis.xAck("chat-stream", "workers", message.id as any);
+          await redis.xDel("chat-stream", message.id as any);
         }
     }
   }
