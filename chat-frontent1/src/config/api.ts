@@ -1,5 +1,5 @@
 
 
 
-export const apiBaseUrl = "http://192.168.0.186:8080";
-export const wsAPIBaseURL = "ws://192.168.0.186:8050"
+export const apiBaseUrl = "http://10.193.111.232:8080";
+export const wsAPIBaseURL = "ws://10.193.111.232:8050"

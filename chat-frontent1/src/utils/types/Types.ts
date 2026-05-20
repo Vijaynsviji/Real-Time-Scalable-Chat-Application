@@ -6,7 +6,7 @@ export type Status = "sent" | "delivered" | "read"
 
 
 export type Message = {
-    message_id: Number | String | null,
+    message_id:  string | null,
     cipher_key:  String | null,
     message_encrypt: string,
     sender_id?: string,

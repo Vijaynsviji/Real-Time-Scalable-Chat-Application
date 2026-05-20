@@ -14,11 +14,12 @@ interface MessageView{
   socketObject?: WebSocket | null,
   selectedContact?: Contact | null,
   handleAddNewMessage: (newMessage:Message)=>void,
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>
 }
 
 
 
-function MessageView({handleAddNewMessage,selectedContact,messages,socketObject}:MessageView) {
+function MessageView({handleAddNewMessage,selectedContact,messages,socketObject,setMessages}:MessageView) {
     const currentUser = useSelector((state:any) => state?.user?.currentUser);
   // const dispatch = useDispatch();
 
@@ -53,7 +54,7 @@ function MessageView({handleAddNewMessage,selectedContact,messages,socketObject}
   return (
     <>
         <MessageViewHeader selectedContact={selectedContact} />
-        <MessageComp messageData={messages}/>
+        <MessageComp messageData={messages} setMessages={setMessages}/>
         <MessageInput sendMessage={sendMessage} />
     </>
   )

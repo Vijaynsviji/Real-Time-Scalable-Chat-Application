@@ -10,6 +10,7 @@ import { apiBaseUrl } from "../../config/api";
 import { useDispatch, useSelector } from "react-redux";
 import { setConversationMessages, setSelectedStoreContact } from "../../store/slicers/conversation";
 import {useGetSet} from 'react-use';
+import { useIsMobile } from "../hooks/useMobileView";
 
 
 export default function Home(){
@@ -18,6 +19,7 @@ export default function Home(){
     const [messages,setMessages] = React.useState<Message[]>([]);
      const currentUserDetails = useSelector((state:any)=> state?.user?.currentUser);
      const dispatch = useDispatch();
+     const {isMobile} = useIsMobile();
 
 
     const handleChangeSelectedContact = async (contact:Contact | null)=>{
@@ -101,11 +103,11 @@ export default function Home(){
     return <div className="bg-[var(--light-color-100)] box-border">
         <div className="border-[2px] box-border border-solid border-[var(--border)] h-[calc(100vh-40px)] m-[20px] rounded-[20px] grid grid-cols-[1fr] md:grid-cols-[1fr_2fr]">
             <div className="box-border hidden md:flex flex-col overflow-hidden border-r-[2px] border-[var(--border)]"><SideBar selectedContact={selectedContact()} handleChangeSelectedContact={handleChangeSelectedContact} /></div>
-            <div className="box-border hidden md:flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact()}  socketObject={socketObject} messages={messages} /></div>
+            <div className="box-border hidden md:flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact()}  socketObject={socketObject} messages={messages} setMessages={setMessages} /></div>
 
 
-            {!selectedContact && <div className="box-border flex md:hidden flex-col overflow-hidden border-r-[2px] border-[var(--border)]"><SideBar selectedContact={selectedContact} handleChangeSelectedContact={handleChangeSelectedContact} /></div>}
-            {selectedContact && <div className="box-border md:hidden flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact()}  socketObject={socketObject} messages={messages} /></div>}
+            {!selectedContact() && <div className="box-border flex md:hidden flex-col overflow-hidden border-r-[2px] border-[var(--border)]"><SideBar selectedContact={selectedContact()} handleChangeSelectedContact={handleChangeSelectedContact}  /></div>}
+            {selectedContact() && <div className="box-border md:hidden flex flex-col  overflow-y-hidden"><MessageView handleAddNewMessage={handleAddNewMessage} selectedContact={selectedContact()}  socketObject={socketObject} messages={messages} setMessages={setMessages} /></div>}
 
         </div>
     </div>

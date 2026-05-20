@@ -4,52 +4,57 @@ import MessageTile from "./messagetile";
 import type { Message, Status } from "../../../utils/types/Types";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from "react-infinite-scroll-component";
 import { apiBaseUrl } from "../../../config/api";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
+import { SortGivenMessageData } from "../../../utils/HelperFunctions";
+import { useIsMobile } from "../../hooks/useMobileView";
 
 interface MessageComp {
   messageData: Message[];
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>
 }
 
 type MessageMap = Record<string, Message[]>;
 
-function MessageComp({ messageData }: MessageComp) {
+function MessageComp({ messageData,setMessages }: MessageComp) {
   const bottomRef = React.useRef<HTMLDivElement | null>(null);
-  const conversations = useSelector((state:any)=> state?.conversations?.conversations);
-  const currentUserDetails = useSelector((state:any)=> state?.user?.currentUser);
-  const selectedUserContact = useSelector((state:any)=>state?.conversations?.selectedContact);
-  const [CurrentViewMessageData,setCurrentViewMessageData] = React.useState<Message[]>([]);
+  const conversations = useSelector(
+    (state: any) => state?.conversations?.conversations,
+  );
+  const currentUserDetails = useSelector(
+    (state: any) => state?.user?.currentUser,
+  );
+  const selectedUserContact = useSelector(
+    (state: any) => state?.conversations?.selectedContact,
+  );
   const MessageMap: MessageMap = groupMessageByDate();
-  const [isFetchingMessages,setIsFetchingMessages] = React.useState(false);
-  const [paginationValue,setPaginationValue] = React.useState(1);
-  const [hasMore,setHasMore] = React.useState(true);
-  const [stopScrollingDown,setStopSCrollingDown] = React.useState(true);
+  const [isFetchingMessages, setIsFetchingMessages] = React.useState(false);
+  const [paginationValue, setPaginationValue] = React.useState(1);
+  const [hasMore, setHasMore] = React.useState(true);
+  const [stopScrollingDown, setStopSCrollingDown] = React.useState(true);
+  
+  const {isMobile} = useIsMobile();
 
   React.useEffect(() => {
-    if(messageData && Array.isArray(messageData) && messageData?.length>0){
-      setCurrentViewMessageData(
-  [...messageData].sort((a, b) =>
-    moment(a?.created_at).diff(moment(b?.created_at))
-  )
-);
-    }
     setStopSCrollingDown(false);
   }, [messageData]); // runs when messages change
 
-
-  React.useEffect(()=>{
-    if(!stopScrollingDown){
+  React.useEffect(() => {
+    if (!stopScrollingDown) {
       bottomRef.current?.scrollIntoView();
     }
-  },[messageData,CurrentViewMessageData])
+  }, [messageData]);
 
   function groupMessageByDate(): MessageMap {
     const dateMap: MessageMap = {};
 
-    for (let item of CurrentViewMessageData) {
-      const key = typeof item?.created_at=="string" ? moment(item?.created_at).format("YYYY-MM-DD")  :  item?.created_at?.toISOString()?.split("T")?.[0] || ""; // YYYY-MM-DD
+    for (let item of messageData) {
+      const key =
+        typeof item?.created_at == "string"
+          ? moment(item?.created_at).format("YYYY-MM-DD")
+          : item?.created_at?.toISOString()?.split("T")?.[0] || ""; // YYYY-MM-DD
 
       if (!dateMap[key]) {
         dateMap[key] = [];
@@ -61,79 +66,107 @@ function MessageComp({ messageData }: MessageComp) {
     return dateMap;
   }
 
-  function getMessagePersonName(id: string){
-    if(!id) return 'Unknown';
+  function getMessagePersonName(id: string) {
+    if (!id) return "Unknown";
 
-    if(id==currentUserDetails?.user_id){
+    if (id == currentUserDetails?.user_id) {
       return "You";
     }
 
     return conversations?.[id]?.Name || "";
   }
 
-  async function loadMoreMessages(){
-    try{
-      if(!CurrentViewMessageData || !Array.isArray(CurrentViewMessageData) || CurrentViewMessageData?.length==0) return;
-      const sizeOfMessageArray = CurrentViewMessageData?.length;
-      const lastMessageId = CurrentViewMessageData?.[0]?.message_id;
-      const conversation_id = selectedUserContact?.conversation_id;
-      
-      const response = await axios.get(`${apiBaseUrl}/conversation/${conversation_id}/messages/pagination`,
-        {params:{
-          last_message_id: lastMessageId,
-          paginationValue: paginationValue
-        }}
+  async function loadMoreMessages() {
+    try {
+      if (
+        !messageData ||
+        !Array.isArray(messageData) ||
+        messageData?.length == 0
       )
-      const MessagesData = response?.data
-      if(MessagesData && Array.isArray(MessagesData?.data) && MessagesData?.data?.length<20) {
+        return;
+        setIsFetchingMessages(true);
+      const sizeOfMessageArray = messageData?.length;
+
+      const lastMessageId = SortGivenMessageData(messageData)?.[0]?.message_id;
+      const conversation_id = selectedUserContact?.conversation_id;
+
+      const response = await axios.get(
+        `${apiBaseUrl}/conversation/${conversation_id}/messages/pagination`,
+        {
+          params: {
+            last_message_id: lastMessageId,
+            paginationValue: paginationValue,
+          },
+        },
+      );
+      const MessagesData = response?.data;
+      if (
+        MessagesData &&
+        Array.isArray(MessagesData?.data) &&
+        MessagesData?.data?.length < 20
+      ) {
         setHasMore(false);
-        setCurrentViewMessageData(prev=>[...prev,...MessagesData?.data]);
+        setMessages((prev) => [...prev, ...MessagesData?.data]);
         setStopSCrollingDown(true);
+      }else{
+        setMessages((prev) => [...prev, ...MessagesData?.data]);
+        setStopSCrollingDown(true);
+        setPaginationValue(prev=>prev++);
       }
-    }catch(e){
+      setIsFetchingMessages(false);
+    } catch (e) {
       console.error("Error in loadMoreMessages " + e);
       return;
     }
   }
 
+  const handleScroll = async (
+  e: React.UIEvent<HTMLDivElement>
+) => {
+   const element = e.currentTarget;
+
+   if (
+      element.scrollTop < 200 && !isFetchingMessages && 
+      hasMore
+   ) {
+      await loadMoreMessages();
+   }
+};
+
   return (
-    <div  id="scrollableChat" className="overflow-y-scroll h-[100%]">
-    <InfiniteScroll
-     next={loadMoreMessages} 
-     scrollableTarget="scrollableChat" 
-     inverse={true}  hasMore={hasMore} 
-     dataLength={messageData?.length} 
-     loader={<div className="overflow-hidden flex justify-center"><CircularProgress color="inherit" aria-label="Loading…" /></div>}
-     style={{
-      display: "flex",
-      flexDirection: "column-reverse",
-    }}
-     >
-      <div className="flex flex-col p-[10px]">
-        {Object.keys(MessageMap).sort((a, b) => a.localeCompare(b)).map((date) => {
-          const sortedMessagesBasedOnTime = MessageMap?.[date]?.sort((firstItem,secondItem)=>{
-            return moment(firstItem?.created_at).diff(secondItem.created_at);
-          })
-          return (
-            <>
-              <div className="flex justify-center my-[20px]" ><p className="text-[var(--secondary-text)] px-[20px] p-[5px] rounded-[20px] border border-solid border-[var(--border)]">{moment(date).format("dddd, MMMM D")}</p></div>
-              {sortedMessagesBasedOnTime?.map((item) => {
-                const personValue = getMessagePersonName(item?.sender_id || "");
-                return (
-                  <MessageTile
-                    status={item?.status as Status}
-                    name={personValue}
-                    messageText={item?.message_encrypt}
-                    date={item?.created_at}
-                  />
-                );
-              })}
-            </>
-          );
-        })}
-      </div>
-    </InfiniteScroll>
-    <div ref={bottomRef} id="LastDiv" />
+    <div id="scrollableChat" className="overflow-y-scroll h-[100%] [overflow-anchor:auto]" onScroll={handleScroll}>
+        <div className="flex flex-col p-[10px]">
+          {Object.keys(MessageMap)
+            .sort((a, b) => a.localeCompare(b))
+            .map((date,index) => {
+              const sortedMessagesBasedOnTime = SortGivenMessageData(MessageMap?.[date]);
+              return (
+                <React.Fragment key={date}>
+                  <div className="flex justify-center my-[20px]">
+                    <p className="text-[var(--secondary-text)] px-[20px] p-[5px] rounded-[20px] border border-solid border-[var(--border)]">
+                      {moment(date).format("dddd, MMMM D")}
+                    </p>
+                  </div>
+                  {sortedMessagesBasedOnTime?.map((item) => {
+                    const personValue = getMessagePersonName(
+                      item?.sender_id || "",
+                    );
+                    const key = item?.message_id || item?.message_encrypt;
+                    return (
+                      <MessageTile
+                        key={key}
+                        status={item?.status as Status}
+                        name={personValue}
+                        messageText={item?.message_encrypt}
+                        date={item?.created_at}
+                      />
+                    );
+                  })}
+                </React.Fragment>
+              );
+            })}
+        </div>
+      <div ref={bottomRef} id="LastDiv" />
     </div>
   );
 }
