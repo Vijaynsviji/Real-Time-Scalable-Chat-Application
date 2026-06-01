@@ -5,7 +5,9 @@ export interface CurrentUser{
     user_id: string | number | null,
     Name: string | null,
     email: string | null,
-    isOnline: Status
+    isOnline: Status,
+    privateKey?: string | null
+    publicKey?: string | null,
 }
 
 const initialState = {
@@ -17,8 +19,12 @@ export const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     setCurrentUser: (state, action) => { state.currentUser = action.payload; },
+    setCurrentUserKeys: (state,action)=>{
+      if(!action.payload) return;
+      state.currentUser = {...state.currentUser, ...action.payload};
+    }
   },
 });
 
-export const { setCurrentUser } = userSlice.actions;
+export const { setCurrentUser,setCurrentUserKeys } = userSlice.actions;
 export default userSlice.reducer;

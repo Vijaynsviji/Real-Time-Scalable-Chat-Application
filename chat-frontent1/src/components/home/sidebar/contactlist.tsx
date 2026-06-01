@@ -16,6 +16,7 @@ export interface Contact{
   Name: string,
   conversation_id?: string | null,
   messages?: Message[] | null,
+  public_key?: string | null
 }
 
 

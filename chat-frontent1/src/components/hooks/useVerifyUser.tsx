@@ -7,7 +7,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { apiBaseUrl, wsAPIBaseURL } from '../../config/api';
 import { useDispatch } from 'react-redux';
-import { setCurrentUser, type CurrentUser } from '../../store/slicers/users';
+import { setCurrentUser, setCurrentUserKeys, type CurrentUser } from '../../store/slicers/users';
+import { getPrivateKey, getPublicKey } from '../../utils/HelperFunctions';
 
 function useVerifyUser() {
 
@@ -36,6 +37,17 @@ function useVerifyUser() {
             }
             const currentUser = response?.data;
             dispatch(setCurrentUser(currentUser?.data));
+
+            const PrivateKey = await getPrivateKey();
+            const PublicKey = await getPublicKey();
+
+            if(!PrivateKey && !PublicKey){
+                dispatch(setCurrentUserKeys({
+                    publicKey: PublicKey,
+                    privateKey: PrivateKey
+                }))
+            }
+
         }catch(e){
             console.error(e);
             navigate('/signin');

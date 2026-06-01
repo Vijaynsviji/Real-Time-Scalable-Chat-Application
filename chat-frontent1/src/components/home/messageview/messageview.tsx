@@ -7,6 +7,7 @@ import { messageData } from './messagedata';
 import type { Contact } from '../sidebar/contactlist';
 import { useSelector } from 'react-redux';
 import { v7  } from "uuid";
+import { ConvertStringToPublicKey, encryptSymmetricKeyWithPublicKey, generateSymmetricKeyAndEncryptMessage } from '../../../utils/HelperFunctions';
 
 
 interface MessageView{
@@ -24,16 +25,28 @@ function MessageView({handleAddNewMessage,selectedContact,messages,socketObject,
   // const dispatch = useDispatch();
 
 
-  const sendMessage = (messageText:string)=>{
+  const sendMessage = async (messageText:string)=>{
     try{
 
       if(!messageText) return;
 
       if(!socketObject || !selectedContact) return;
 
+      const EncryptedData = await generateSymmetricKeyAndEncryptMessage(messageText);
+
+      if(!EncryptedData){
+        throw("Unable to Encrypt Message Text");
+      }
+
+      const publicKeyOfCurrentSelectedUser = await ConvertStringToPublicKey(selectedContact?.public_key);
+      if(!publicKeyOfCurrentSelectedUser){
+        throw("Unable to Convert Public key String to Public Crypto Key");
+      }
+      const EncrtyptSymmetricKey = await encryptSymmetricKeyWithPublicKey(EncryptedData?.encryptKey,publicKeyOfCurrentSelectedUser)
+
       const messageObject:Message = {
         message_id:  v7(),
-        cipher_key: "",
+        cipher_key: EncrtyptSymmetricKey,
         message_encrypt: messageText,
         status: "sent",
         created_at: new Date().toISOString(),

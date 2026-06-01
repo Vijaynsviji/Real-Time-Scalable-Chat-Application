@@ -6,6 +6,7 @@ import React from "react";
 import axios, { AxiosError } from 'axios';
 import { apiBaseUrl } from "../../config/api";
 import Alert from "@mui/material/Alert";
+import { generatePrivateAndPublicKeyPair, storePrivateAndPublicKeyPair } from "../../utils/HelperFunctions";
 
 
 interface AuthBaseComp{
@@ -28,6 +29,7 @@ export default function AuthBaseComp({isSignUp}:AuthBaseComp){
     const [showErrorAlert,setShowErrorAlert] = React.useState(false);
     const [ErrorMessage,setErrorMessage] = React.useState("");
     const navigate = useNavigate();
+
 
 
     const handleChange = (value:string,  type: handleChangeType)=>{
@@ -67,11 +69,15 @@ export default function AuthBaseComp({isSignUp}:AuthBaseComp){
                 setIsLoading(false);
                 if(!isSignUp){
                     const token = responseData?.data?.token;
-
                     localStorage.setItem('token',token);
-
-
                 };
+                
+                if(isSignUp){
+                    const userId = res?.data?.user_id;
+                    if(!userId){
+                        handleKeyCreationAndStore(userId);
+                    }
+                }
 
                 setTimeout(()=>{
                     setShowAlert(false);
@@ -89,6 +95,33 @@ export default function AuthBaseComp({isSignUp}:AuthBaseComp){
                 setErrorMessage("");
             },2000)
 
+        }
+    }
+
+    const handleKeyCreationAndStore = async (userId:string)=>{
+        try{
+
+            const KeyPair: CryptoKeyPair | null = await generatePrivateAndPublicKeyPair();
+            if(!KeyPair){
+                throw("Unable to Create Public Key And Private Key Pair!");
+            }
+
+            //update User Public Key Columns as Well
+            const updatePublicKeyResponse = await axios.post(apiBaseUrl + `/user/:${userId}`,{
+                publicKey: KeyPair?.publicKey
+            });
+
+            if(!updatePublicKeyResponse || updatePublicKeyResponse?.status !=200){
+                throw("Unable to Post Public Key to Backend");
+            }
+
+            const response = await storePrivateAndPublicKeyPair(KeyPair);
+            if(!response){
+                throw("Unable to store Public Key and Private Key Pair!");
+            }
+        }catch(e){
+            console.error("Error in handleKeyCreationAndStore " + e);
+            return;
         }
     }
 
