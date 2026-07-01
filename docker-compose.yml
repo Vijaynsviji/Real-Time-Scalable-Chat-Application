@@ -1,0 +1,136 @@
+services:
+  frontend:
+    build:
+      context: ./chat-frontent1
+    command: npm run dev
+    # this is for the local developement, here mirror our entire folder to the container folder.
+    volumes:
+      - ./chat-frontent1:/frontend 
+      - /frontend/node_modules
+    ports:
+      - 5173:5173
+    environment:
+      - VITE_APIBASE_URL=http://localhost:8080
+      - VITE_WSAPIBASEURL=ws://localhost:8050
+
+
+  backend:
+    build:
+      context: ./backend
+    command: sh -c  "npx prisma generate && npx prisma migrate deploy && npm run serve"
+    volumes:
+      - ./backend:/backend
+      - /backend/node_modules
+    ports:
+      - 8080:8080
+    environment:
+      - BCRYPT_SECRETE=${BCRYPT_SECRETE}
+      - JWT_SECRETE=${JWT_SECRETE}
+      - SALT_ROUNDS=${SALT_ROUNDS}
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres_database:5432/${DB_NAME}?schema=public
+      - REDIS_URL_WORKER_FOR_MSGQUEUE=redis://message_queue:6379
+    depends_on:
+      - postgres_database
+      - message_queue
+    
+
+
+  loadbalancer:
+    build:
+      context: './backend-socket'
+    command: npm run start
+    volumes:
+      - ./backend-socket:/backend-socket
+      - /backend-socket/node_modules
+    ports: 
+      - 8050:8050
+    environment:
+      - SOCKET_SERVERS=socket1:8081,socket2:8082
+  
+  socket1:
+    build: 
+      context: './backend-socket'
+    command: npm run serve
+    volumes:
+      - ./backend-socket:/backend-socket
+      - /backend-socket/node_modules
+    environment:
+      - PORT=8081
+      - CHANNEL_NAME=Server1
+      - JWT_SECRETE=${JWT_SECRETE}
+      - REDIS_URL_WORKER_FOR_MSGQUEUE=redis://message_queue:6379
+      - REDIS_URL_WORKER_FOR_PUBSUB=redis://redis_pubSub:6379
+    depends_on:
+      - message_queue
+      - redis_pubSub
+
+  socket2:
+    build: 
+      context: './backend-socket'
+    command: npm run serve
+    volumes:
+      - ./backend-socket:/backend-socket
+      - /backend-socket/node_modules
+    environment:
+      - PORT=8082
+      - CHANNEL_NAME=Server2
+      - JWT_SECRETE=${JWT_SECRETE}
+      - REDIS_URL_WORKER_FOR_MSGQUEUE=redis://message_queue:6379
+      - REDIS_URL_WORKER_FOR_PUBSUB=redis://redis_pubSub:6379
+    depends_on:
+      - message_queue
+      - redis_pubSub
+
+  backend_worker: 
+    build:
+      context: './backend-worker'
+    command: sh -c "npx prisma generate && npm run start"
+    volumes:
+      - ./backend-worker:/backend-worker
+      - /backend-worker/node_modules
+    environment: 
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres_database:5432/${DB_NAME}?schema=public
+      - REDIS_URL_WORKER_FOR_MSGQUEUE=redis://message_queue:6379
+      - REDIS_NAME_WORKER_FOR_MSGQUEUE=worker-1
+    # ports:
+    #   - 8080:8080
+    depends_on:
+      - message_queue
+      - postgres_database
+  
+  message_queue:
+    image: redis:alpine
+    volumes:
+      - message_queue_volume:/data
+    ports: 
+      - 6379
+      - 6381:6379
+  
+  redis_pubSub:
+    image: redis:alpine
+    volumes:
+      - redis_pubSub_volume:/data
+    ports:
+      - 6379
+      - 6379:6379
+  
+  postgres_database:
+    image:  postgres:17-alpine
+    volumes:
+      - postgres_database_volume:/var/lib/postgresql/data
+    ports: 
+      - 5432
+      - 5431:5432
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    
+
+volumes:
+  message_queue_volume:
+  redis_pubSub_volume:
+  postgres_database_volume:
+
+
+    

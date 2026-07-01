@@ -47,10 +47,10 @@ export const SaveNewMessageForConversationId = async (conversation_id:string,Mes
 }
 
 
-export const UpdateMessageTextBasedOnMessageId = async (conversation_id:string,message_id: string,cipher_key:string,message_encrypt:string)=>{
+export const UpdateMessageTextBasedOnMessageId = async (conversation_id:string,message_id: string,cipher_key:string,message_encrypt:string,sender_cipher_key:string)=>{
     try{
 
-        const updatedMessage  = await MessageRepo.UpdateMessageBasedOnConversationIdAndMessageId(conversation_id,message_id,cipher_key,message_encrypt);
+        const updatedMessage  = await MessageRepo.UpdateMessageBasedOnConversationIdAndMessageId(conversation_id,message_id,cipher_key,message_encrypt,sender_cipher_key);
         return GetReturnMessageObject(200, Status.Success,updatedMessage,"Message Update Succes.");
     }catch(e){
         console.error("Error in signupUser " + e);

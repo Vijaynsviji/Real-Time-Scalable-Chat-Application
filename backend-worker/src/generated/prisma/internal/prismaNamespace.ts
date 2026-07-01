@@ -899,6 +899,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   profileImageUrl: 'profileImageUrl',
+  public_key: 'public_key',
   created_at: 'created_at'
 } as const
 
@@ -928,6 +929,7 @@ export type GroupMembersScalarFieldEnum = (typeof GroupMembersScalarFieldEnum)[k
 export const MessagesScalarFieldEnum = {
   message_id: 'message_id',
   cipher_key: 'cipher_key',
+  sender_cipher_key: 'sender_cipher_key',
   message_encrypt: 'message_encrypt',
   status: 'status',
   created_at: 'created_at',

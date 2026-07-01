@@ -1,5 +1,6 @@
 
 import {prisma} from '../Utils/prisma.js';
+import { sendMessage } from '../Utils/redis.js';
 
 export const getUsersUsingEmail = async (email:string)=>{
     try{
@@ -31,6 +32,27 @@ export const checkValidUserOrNot = async (userId: string)=>{
 
     }catch(e){
         console.error("Error in checkValidUserOrNot " + e);
+        return false;
+    }
+}
+
+export const UpdateUserPublicId = async (user_id:string, publicKey:string)=>{
+    try{
+
+        const updateBody = {
+            user_id: user_id,
+            publicKey: publicKey
+        }
+
+        const job = JSON.stringify({
+            type: "UpdateUserPublicKey",
+            Data: updateBody
+        })
+
+        sendMessage(job);
+        return true
+    }catch(e){
+        console.error("Error in UpdateUserPublicId " + e);
         return false;
     }
 }

@@ -9,3 +9,5 @@ export const store = configureStore({
     conversations: ConversationSlice
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;

@@ -16,6 +16,7 @@ export const getAllConversationUsingUserId = async (UserId: string)=>{
                         user_id: true,
                         email: true,
                         first_name: true,
+                        public_key: true,
                     }
                 },
                 conversation_id: true,
@@ -52,7 +53,8 @@ export const getAllConversationUsingUserId = async (UserId: string)=>{
                     Name: participant?.[0]?.user?.first_name,
                     isOnline: true,
                     messages: item?.conversation?.messages,
-                    lastMessage: item?.conversation?.last_message
+                    lastMessage: item?.conversation?.last_message,
+                    public_key: participant?.[0]?.user?.public_key
                 }
             }
             return null;
@@ -117,6 +119,12 @@ export const SaveConversation = async (user1: string,user2: string)=>{
         //     }
         // })
 
+        const getUserPublicKey = await prisma.user.findFirst({
+            where:{
+                user_id: user2
+            }
+        })
+
         const ConversationId = uuidv4();
         const firstParticipant = uuidv4();
         const secondParticipant = uuidv4();
@@ -128,6 +136,7 @@ export const SaveConversation = async (user1: string,user2: string)=>{
             firstParticipant_id: firstParticipant,
             user_id2: user2,
             secondParticipant_id: secondParticipant,
+            public_key: getUserPublicKey?.public_key,
         }
 
         const stringfiedResponse = JSON.stringify(

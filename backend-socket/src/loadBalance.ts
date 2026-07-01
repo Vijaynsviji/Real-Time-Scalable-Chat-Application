@@ -4,8 +4,20 @@ import httpProxy from 'http-proxy';
 
 
 const proxy = httpProxy.createProxyServer();
+let serversList  = [
+  "ws://localhost:8081"
+];
+const serverEnvironmentString = process.env.SOCKET_SERVERS;
 
-const servers = [
+console.log("serverEnvironmentString: ",serverEnvironmentString);
+
+if(serverEnvironmentString){
+serversList = serverEnvironmentString.split(",")
+  .map(server => `ws://${server}`);
+}
+
+console.log("serversList: ",serversList);
+const servers = serversList || [
   "ws://localhost:8081",
   "ws://localhost:8082",
   // "ws://localhost:8083"

@@ -8,7 +8,7 @@ interface ContactCard extends ContactCardProp{
     onClickContact: (contact:Contact)=>void
 }
 
-function ContactCard({isSelected,email,conversation_id,lastMessage,messages,lastMessageDate,unReadMessageCount,Name,isOnline=false,id,onClickContact}:ContactCard) {
+function ContactCard({public_key,isSelected,email,conversation_id,lastMessage,messages,lastMessageDate,unReadMessageCount,Name,isOnline=false,id,onClickContact}:ContactCard) {
     const date = new Date();
     const formattedDate = lastMessageDate? moment(lastMessageDate).format('MM/DD/YY'): ""; 
     const numberOfUnReadMessage = typeof unReadMessageCount === "number" ? unReadMessageCount.toString() : unReadMessageCount;
@@ -22,6 +22,7 @@ function ContactCard({isSelected,email,conversation_id,lastMessage,messages,last
         isOnline: isOnline,
         messages: messages,
         conversation_id: conversation_id || null,
+        public_key: public_key || null
     }
     
   return (

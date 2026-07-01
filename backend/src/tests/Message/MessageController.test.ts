@@ -95,6 +95,7 @@ describe("Message Controller Tests", ()=>{
                 query: {conversation_id:conversation_id},
                 body: {
                     cipher_key: "cipher text",
+                    sender_cipher_key: "sender_cipher_key",
                     message_encrypt: "encrypt",
                     status: "read",
                     sender_id: "1",
@@ -108,6 +109,7 @@ describe("Message Controller Tests", ()=>{
 
             const newMessage = {
                     cipher_key: "cipher text",
+                    sender_cipher_key: "sender_cipher_key",
                     message_encrypt: "encrypt",
                     status: "Read",
                     sender_id: "1",
@@ -198,6 +200,7 @@ describe("Message Controller Tests", ()=>{
                 query: {conversation_id:conversation_id,message_id:message_id},
                 body: {
                     cipher_key: "cipher text",
+                    sender_cipher_key: "sender_cipher_key",
                     message_encrypt: "encrypt",
                 }
             } as any;
@@ -210,6 +213,7 @@ describe("Message Controller Tests", ()=>{
             const updatedMessage = {
                 message_id: "1",
                 cipher_key: "cipher text",
+                sender_cipher_key: "sender_cipher_key",
                 message_encrypt:  "encrypt"
             }
 
@@ -240,6 +244,7 @@ describe("Message Controller Tests", ()=>{
                 query: {conversation_id:conversation_id,message_id:message_id},
                 body: {
                     cipher_key: "cipher text",
+                    sender_cipher_key: "sender_cipher_key",
                     message_encrypt: "encrypt",
                 }
             } as any;
@@ -252,6 +257,7 @@ describe("Message Controller Tests", ()=>{
             const updatedMessage = {
                 message_id: "1",
                 cipher_key: "cipher text",
+                sender_cipher_key: "sender_cipher_key",
                 message_encrypt:  "encrypt"
             }
 
@@ -281,6 +287,7 @@ describe("Message Controller Tests", ()=>{
                 query: {conversation_id:conversation_id,message_id:message_id},
                 body: {
                     cipher_key: "cipher text",
+                    sender_cipher_key: "sender_cipher_key",
                     message_encrypt: "encrypt",
                 }
             } as any;
@@ -322,6 +329,7 @@ describe("Message Controller Tests", ()=>{
                 query: {conversation_id:conversation_id,message_id:message_id},
                 body: {
                     cipher_key: null,
+                    sender_cipher_key: null,
                     message_encrypt: "encrypt",
                 }
             } as any;
@@ -334,6 +342,7 @@ describe("Message Controller Tests", ()=>{
             const updatedMessage = {
                 message_id: "1",
                 cipher_key: "cipher text",
+                sender_cipher_key: "sender_cipher_key",
                 message_encrypt:  "encrypt"
             }
 
@@ -363,6 +372,7 @@ describe("Message Controller Tests", ()=>{
                 query: {conversation_id:conversation_id,message_id:message_id},
                 body: {
                     cipher_key: "Some Value",
+                    sender_cipher_key: "sender_cipher_key",
                     message_encrypt: null,
                 }
             } as any;

@@ -11,5 +11,6 @@ export interface webSocketMessage{
     status: string,
     sender_id: string,
     conversation_id: string,
-    created_at?: string
+    created_at?: string,
+    sender_cipher_key?:string,
 }

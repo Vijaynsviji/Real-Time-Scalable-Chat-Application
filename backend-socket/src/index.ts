@@ -6,13 +6,15 @@ import 'dotenv/config'
 import type { webSocketMessage } from "./types.js";
 
 
+const PORTValue = process.env.PORT || 8081;
+const channelName = process.env.CHANNEL_NAME || 'Server1';
 
 
-const wss = new WebSocketServer({ port: 8081 });
+const wss = new WebSocketServer({ port: Number(PORTValue) });
 const redisWorker = createClient({
-    url: 'redis://localhost:6381'
+    url: process.env.REDIS_URL_WORKER_FOR_MSGQUEUE ||  'redis://localhost:6381'
 });
-const channelName = "Server1";
+// const channelName = "Server1";
 let redisClient: ReturnType<typeof createClient>;
 const UserSocketMap = new Map();
 
@@ -75,6 +77,7 @@ async function onUserSendMessage(message:string,ws:WebSocket){
     const jobData = {
       message_id: parseMessage?.message_id,
       cipher_key: parseMessage?.cipher_key,
+      sender_cipher_key: parseMessage?.sender_cipher_key,
       message_encrypt: parseMessage?.message_encrypt,
       status: parseMessage?.status,
       sender_id: parseMessage?.sender_id,
@@ -128,9 +131,13 @@ async function onReceivedMessage(message:string){
 async function startSockerServer() {
   try {
     await redisWorker.connect();
-     redisClient = await createClient();
+     redisClient = await createClient({
+      url: process.env.REDIS_URL_WORKER_FOR_PUBSUB || "redis://localhost:6381"
+     });
      redisClient.connect();
-     const redisClientForSubScribe = await createClient();
+     const redisClientForSubScribe = await createClient({
+      url: process.env.REDIS_URL_WORKER_FOR_PUBSUB || "redis://localhost:6381"
+     });
      redisClientForSubScribe.connect();
     if(!redisClient) return;
 

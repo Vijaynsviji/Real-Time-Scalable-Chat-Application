@@ -4,11 +4,11 @@ import { AssignJob } from "./jobs/assigner.js";
 
 
 const redis = createClient({
-    url: 'redis://localhost:6381'
+    url: process.env.REDIS_URL_WORKER_FOR_MSGQUEUE || 'redis://localhost:6381'
 });
 
 async function startWorker() {
-  const workerName = "worker-1";
+  const workerName = process.env.REDIS_NAME_WORKER_FOR_MSGQUEUE || "worker-1";
 
   console.log("Above While Loop");
 

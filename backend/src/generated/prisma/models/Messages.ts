@@ -27,6 +27,7 @@ export type AggregateMessages = {
 export type MessagesMinAggregateOutputType = {
   message_id: string | null
   cipher_key: string | null
+  sender_cipher_key: string | null
   message_encrypt: string | null
   status: string | null
   created_at: Date | null
@@ -37,6 +38,7 @@ export type MessagesMinAggregateOutputType = {
 export type MessagesMaxAggregateOutputType = {
   message_id: string | null
   cipher_key: string | null
+  sender_cipher_key: string | null
   message_encrypt: string | null
   status: string | null
   created_at: Date | null
@@ -47,6 +49,7 @@ export type MessagesMaxAggregateOutputType = {
 export type MessagesCountAggregateOutputType = {
   message_id: number
   cipher_key: number
+  sender_cipher_key: number
   message_encrypt: number
   status: number
   created_at: number
@@ -59,6 +62,7 @@ export type MessagesCountAggregateOutputType = {
 export type MessagesMinAggregateInputType = {
   message_id?: true
   cipher_key?: true
+  sender_cipher_key?: true
   message_encrypt?: true
   status?: true
   created_at?: true
@@ -69,6 +73,7 @@ export type MessagesMinAggregateInputType = {
 export type MessagesMaxAggregateInputType = {
   message_id?: true
   cipher_key?: true
+  sender_cipher_key?: true
   message_encrypt?: true
   status?: true
   created_at?: true
@@ -79,6 +84,7 @@ export type MessagesMaxAggregateInputType = {
 export type MessagesCountAggregateInputType = {
   message_id?: true
   cipher_key?: true
+  sender_cipher_key?: true
   message_encrypt?: true
   status?: true
   created_at?: true
@@ -162,6 +168,7 @@ export type MessagesGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type MessagesGroupByOutputType = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at: Date
@@ -193,6 +200,7 @@ export type MessagesWhereInput = {
   NOT?: Prisma.MessagesWhereInput | Prisma.MessagesWhereInput[]
   message_id?: Prisma.StringFilter<"Messages"> | string
   cipher_key?: Prisma.StringFilter<"Messages"> | string
+  sender_cipher_key?: Prisma.StringFilter<"Messages"> | string
   message_encrypt?: Prisma.StringFilter<"Messages"> | string
   status?: Prisma.StringFilter<"Messages"> | string
   created_at?: Prisma.DateTimeFilter<"Messages"> | Date | string
@@ -206,6 +214,7 @@ export type MessagesWhereInput = {
 export type MessagesOrderByWithRelationInput = {
   message_id?: Prisma.SortOrder
   cipher_key?: Prisma.SortOrder
+  sender_cipher_key?: Prisma.SortOrder
   message_encrypt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -222,6 +231,7 @@ export type MessagesWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.MessagesWhereInput[]
   NOT?: Prisma.MessagesWhereInput | Prisma.MessagesWhereInput[]
   cipher_key?: Prisma.StringFilter<"Messages"> | string
+  sender_cipher_key?: Prisma.StringFilter<"Messages"> | string
   message_encrypt?: Prisma.StringFilter<"Messages"> | string
   status?: Prisma.StringFilter<"Messages"> | string
   created_at?: Prisma.DateTimeFilter<"Messages"> | Date | string
@@ -235,6 +245,7 @@ export type MessagesWhereUniqueInput = Prisma.AtLeast<{
 export type MessagesOrderByWithAggregationInput = {
   message_id?: Prisma.SortOrder
   cipher_key?: Prisma.SortOrder
+  sender_cipher_key?: Prisma.SortOrder
   message_encrypt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -251,6 +262,7 @@ export type MessagesScalarWhereWithAggregatesInput = {
   NOT?: Prisma.MessagesScalarWhereWithAggregatesInput | Prisma.MessagesScalarWhereWithAggregatesInput[]
   message_id?: Prisma.StringWithAggregatesFilter<"Messages"> | string
   cipher_key?: Prisma.StringWithAggregatesFilter<"Messages"> | string
+  sender_cipher_key?: Prisma.StringWithAggregatesFilter<"Messages"> | string
   message_encrypt?: Prisma.StringWithAggregatesFilter<"Messages"> | string
   status?: Prisma.StringWithAggregatesFilter<"Messages"> | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Messages"> | Date | string
@@ -261,6 +273,7 @@ export type MessagesScalarWhereWithAggregatesInput = {
 export type MessagesCreateInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -272,6 +285,7 @@ export type MessagesCreateInput = {
 export type MessagesUncheckedCreateInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -283,6 +297,7 @@ export type MessagesUncheckedCreateInput = {
 export type MessagesUpdateInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -294,6 +309,7 @@ export type MessagesUpdateInput = {
 export type MessagesUncheckedUpdateInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -305,6 +321,7 @@ export type MessagesUncheckedUpdateInput = {
 export type MessagesCreateManyInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -315,6 +332,7 @@ export type MessagesCreateManyInput = {
 export type MessagesUpdateManyMutationInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -323,6 +341,7 @@ export type MessagesUpdateManyMutationInput = {
 export type MessagesUncheckedUpdateManyInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -343,6 +362,7 @@ export type MessagesOrderByRelationAggregateInput = {
 export type MessagesCountOrderByAggregateInput = {
   message_id?: Prisma.SortOrder
   cipher_key?: Prisma.SortOrder
+  sender_cipher_key?: Prisma.SortOrder
   message_encrypt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -353,6 +373,7 @@ export type MessagesCountOrderByAggregateInput = {
 export type MessagesMaxOrderByAggregateInput = {
   message_id?: Prisma.SortOrder
   cipher_key?: Prisma.SortOrder
+  sender_cipher_key?: Prisma.SortOrder
   message_encrypt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -363,6 +384,7 @@ export type MessagesMaxOrderByAggregateInput = {
 export type MessagesMinOrderByAggregateInput = {
   message_id?: Prisma.SortOrder
   cipher_key?: Prisma.SortOrder
+  sender_cipher_key?: Prisma.SortOrder
   message_encrypt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -478,6 +500,7 @@ export type MessagesUncheckedUpdateManyWithoutConversationNestedInput = {
 export type MessagesCreateWithoutUserInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -488,6 +511,7 @@ export type MessagesCreateWithoutUserInput = {
 export type MessagesUncheckedCreateWithoutUserInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -527,6 +551,7 @@ export type MessagesScalarWhereInput = {
   NOT?: Prisma.MessagesScalarWhereInput | Prisma.MessagesScalarWhereInput[]
   message_id?: Prisma.StringFilter<"Messages"> | string
   cipher_key?: Prisma.StringFilter<"Messages"> | string
+  sender_cipher_key?: Prisma.StringFilter<"Messages"> | string
   message_encrypt?: Prisma.StringFilter<"Messages"> | string
   status?: Prisma.StringFilter<"Messages"> | string
   created_at?: Prisma.DateTimeFilter<"Messages"> | Date | string
@@ -537,6 +562,7 @@ export type MessagesScalarWhereInput = {
 export type MessagesCreateWithoutConversationInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -547,6 +573,7 @@ export type MessagesCreateWithoutConversationInput = {
 export type MessagesUncheckedCreateWithoutConversationInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -567,6 +594,7 @@ export type MessagesCreateManyConversationInputEnvelope = {
 export type MessagesCreateWithoutLastMessageOfInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -577,6 +605,7 @@ export type MessagesCreateWithoutLastMessageOfInput = {
 export type MessagesUncheckedCreateWithoutLastMessageOfInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -619,6 +648,7 @@ export type MessagesUpdateToOneWithWhereWithoutLastMessageOfInput = {
 export type MessagesUpdateWithoutLastMessageOfInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -629,6 +659,7 @@ export type MessagesUpdateWithoutLastMessageOfInput = {
 export type MessagesUncheckedUpdateWithoutLastMessageOfInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -639,6 +670,7 @@ export type MessagesUncheckedUpdateWithoutLastMessageOfInput = {
 export type MessagesCreateManyUserInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -648,6 +680,7 @@ export type MessagesCreateManyUserInput = {
 export type MessagesUpdateWithoutUserInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -658,6 +691,7 @@ export type MessagesUpdateWithoutUserInput = {
 export type MessagesUncheckedUpdateWithoutUserInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -668,6 +702,7 @@ export type MessagesUncheckedUpdateWithoutUserInput = {
 export type MessagesUncheckedUpdateManyWithoutUserInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -677,6 +712,7 @@ export type MessagesUncheckedUpdateManyWithoutUserInput = {
 export type MessagesCreateManyConversationInput = {
   message_id: string
   cipher_key: string
+  sender_cipher_key: string
   message_encrypt: string
   status: string
   created_at?: Date | string
@@ -686,6 +722,7 @@ export type MessagesCreateManyConversationInput = {
 export type MessagesUpdateWithoutConversationInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -696,6 +733,7 @@ export type MessagesUpdateWithoutConversationInput = {
 export type MessagesUncheckedUpdateWithoutConversationInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -706,6 +744,7 @@ export type MessagesUncheckedUpdateWithoutConversationInput = {
 export type MessagesUncheckedUpdateManyWithoutConversationInput = {
   message_id?: Prisma.StringFieldUpdateOperationsInput | string
   cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
+  sender_cipher_key?: Prisma.StringFieldUpdateOperationsInput | string
   message_encrypt?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -717,6 +756,7 @@ export type MessagesUncheckedUpdateManyWithoutConversationInput = {
 export type MessagesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   message_id?: boolean
   cipher_key?: boolean
+  sender_cipher_key?: boolean
   message_encrypt?: boolean
   status?: boolean
   created_at?: boolean
@@ -730,6 +770,7 @@ export type MessagesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type MessagesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   message_id?: boolean
   cipher_key?: boolean
+  sender_cipher_key?: boolean
   message_encrypt?: boolean
   status?: boolean
   created_at?: boolean
@@ -742,6 +783,7 @@ export type MessagesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type MessagesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   message_id?: boolean
   cipher_key?: boolean
+  sender_cipher_key?: boolean
   message_encrypt?: boolean
   status?: boolean
   created_at?: boolean
@@ -754,6 +796,7 @@ export type MessagesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type MessagesSelectScalar = {
   message_id?: boolean
   cipher_key?: boolean
+  sender_cipher_key?: boolean
   message_encrypt?: boolean
   status?: boolean
   created_at?: boolean
@@ -761,7 +804,7 @@ export type MessagesSelectScalar = {
   conversation_id?: boolean
 }
 
-export type MessagesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"message_id" | "cipher_key" | "message_encrypt" | "status" | "created_at" | "sender_id" | "conversation_id", ExtArgs["result"]["messages"]>
+export type MessagesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"message_id" | "cipher_key" | "sender_cipher_key" | "message_encrypt" | "status" | "created_at" | "sender_id" | "conversation_id", ExtArgs["result"]["messages"]>
 export type MessagesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   conversation?: boolean | Prisma.Messages$conversationArgs<ExtArgs>
@@ -786,6 +829,7 @@ export type $MessagesPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     message_id: string
     cipher_key: string
+    sender_cipher_key: string
     message_encrypt: string
     status: string
     created_at: Date
@@ -1219,6 +1263,7 @@ export interface Prisma__MessagesClient<T, Null = never, ExtArgs extends runtime
 export interface MessagesFieldRefs {
   readonly message_id: Prisma.FieldRef<"Messages", 'String'>
   readonly cipher_key: Prisma.FieldRef<"Messages", 'String'>
+  readonly sender_cipher_key: Prisma.FieldRef<"Messages", 'String'>
   readonly message_encrypt: Prisma.FieldRef<"Messages", 'String'>
   readonly status: Prisma.FieldRef<"Messages", 'String'>
   readonly created_at: Prisma.FieldRef<"Messages", 'DateTime'>

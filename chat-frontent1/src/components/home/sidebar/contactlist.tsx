@@ -34,13 +34,13 @@ interface ContactList{
 }
 
 function ContactList({allUserConverations,handleChangeSelectedContact,selectedContact}:ContactList) {
-
+  const allConversationArray = Object.values(allUserConverations);
 
   return (
     <div className='overflow-y-scroll h-[100%]'>
       <div className='flex flex-col'>
-        {allUserConverations && allUserConverations?.map(item=>{
-          return <ContactCard conversation_id={item?.conversation_id} email={item?.email} key={item?.id} id={item?.id || null} messages={item?.messages} onClickContact={handleChangeSelectedContact}  isOnline={item?.isOnline} Name={item?.Name} unReadMessageCount={item?.unReadMessageCount} lastMessage={item?.lastMessage} lastMessageDate={item?.lastMessageDate} isSelected={selectedContact?.email==item?.email}/>
+        {allConversationArray && allConversationArray?.map(item=>{
+          return <ContactCard public_key={item?.public_key} conversation_id={item?.conversation_id} email={item?.email} key={item?.id} id={item?.id || null} messages={item?.messages} onClickContact={handleChangeSelectedContact}  isOnline={item?.isOnline} Name={item?.Name} unReadMessageCount={item?.unReadMessageCount} lastMessage={item?.lastMessage} lastMessageDate={item?.lastMessageDate} isSelected={selectedContact?.email==item?.email}/>
         })}
       </div>
       

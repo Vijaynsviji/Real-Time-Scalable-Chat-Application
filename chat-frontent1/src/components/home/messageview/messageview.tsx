@@ -7,7 +7,7 @@ import { messageData } from './messagedata';
 import type { Contact } from '../sidebar/contactlist';
 import { useSelector } from 'react-redux';
 import { v7  } from "uuid";
-import { ConvertStringToPublicKey, encryptSymmetricKeyWithPublicKey, generateSymmetricKeyAndEncryptMessage } from '../../../utils/HelperFunctions';
+import { Base64StringToCryptoKey, encryptSymmetricKeyWithPublicKey, generateSymmetricKeyAndEncryptMessage } from '../../../utils/HelperFunctions';
 
 
 interface MessageView{
@@ -38,25 +38,30 @@ function MessageView({handleAddNewMessage,selectedContact,messages,socketObject,
         throw("Unable to Encrypt Message Text");
       }
 
-      const publicKeyOfCurrentSelectedUser = await ConvertStringToPublicKey(selectedContact?.public_key);
-      if(!publicKeyOfCurrentSelectedUser){
+      const publicKeyOfCurrentSelectedUser = await Base64StringToCryptoKey(selectedContact?.public_key || "");
+      const publicKeyOfCurrentUser = await Base64StringToCryptoKey(currentUser?.public_key);
+      if(!publicKeyOfCurrentSelectedUser || !publicKeyOfCurrentUser){
         throw("Unable to Convert Public key String to Public Crypto Key");
       }
-      const EncrtyptSymmetricKey = await encryptSymmetricKeyWithPublicKey(EncryptedData?.encryptKey,publicKeyOfCurrentSelectedUser)
+      const EncrtyptSymmetricKey = await encryptSymmetricKeyWithPublicKey(EncryptedData?.encryptKey,publicKeyOfCurrentSelectedUser);
+      const EncryptedSymmetricKeyOfSender = await encryptSymmetricKeyWithPublicKey(EncryptedData?.encryptKey,publicKeyOfCurrentUser);
+      const {privateKey,...currentUserDetailsExceptPrivateKey} = currentUser
 
       const messageObject:Message = {
         message_id:  v7(),
         cipher_key: EncrtyptSymmetricKey,
-        message_encrypt: messageText,
+        sender_cipher_key: EncryptedSymmetricKeyOfSender,
+        message_encrypt: EncryptedData?.encryptedMessage,
         status: "sent",
         created_at: new Date().toISOString(),
         sender_id: currentUser?.user_id || currentUser?.data?.user_id,
-        conversation_id: selectedContact?.conversation_id || ""
+        conversation_id: selectedContact?.conversation_id || "",
+        currentUserDetails: currentUserDetailsExceptPrivateKey
       };
       
       socketObject.send(JSON.stringify({...messageObject,user_email: selectedContact?.email}));
 
-      handleAddNewMessage(messageObject);
+      handleAddNewMessage({...messageObject,message_encrypt:messageText});
 
     }catch(e){
       console.error("Error in sendMessage " + e);

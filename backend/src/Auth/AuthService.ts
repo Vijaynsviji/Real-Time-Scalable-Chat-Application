@@ -39,6 +39,8 @@ export const signupUser = async (user: userSignUp) => {
             first_name: response?.first_name,
             last_name: response?.last_name,
             email: response?.email,
+            user_id: response?.user_id,
+            public_key: user?.public_key
             // created_at: response?.created_at
         }
         
@@ -89,6 +91,10 @@ export const verifynUser = async (token: string) => {
                 email: parsedInfo?.email || ""
             }
         })
+
+        if(!currentUser){
+            return GetReturnMessageObject(404, Status.Error,null,"Not a verified User!!");
+        }
 
         return  GetReturnMessageObject(200, Status.Success,{...currentUser,user_id:currentUser?.user_id.toLocaleString()},"User Verified!");
     }catch (e) {

@@ -2,13 +2,14 @@ import React from "react";
 import ContactList, { type Contact, type ContactCardProp } from "./contactlist";
 import SideBarHeader from "./sidebarheader";
 import SideBarSearch from "./sidebarsearch";
-import { debounce } from "../../../utils/HelperFunctions";
+import { debounce, DecryptMessage } from "../../../utils/HelperFunctions";
 import axios from "axios";
 import { apiBaseUrl } from "../../../config/api";
 import NewChat from "./newchat/newchat";
 import { staticContactData } from "./sidebardata";
 import { useDispatch, useSelector } from "react-redux";
-import { setConversations } from "../../../store/slicers/conversation";
+import { fetchConversations, setConversations } from "../../../store/slicers/conversation";
+import type { Message } from "../../../utils/types/Types";
 
 
 interface SideBar{
@@ -25,6 +26,8 @@ export default function SideBar({handleChangeSelectedContact,selectedContact}:Si
     const [showSearchContact,setShowSearchContact] = React.useState(false);
     const currentUserDetails = useSelector((state:any)=> state?.user?.currentUser);
     const dispatch = useDispatch();
+    const conversationsData = useSelector((state:any) => state?.conversations?.conversations);
+
 
 
     const handleCloseNewContact = ()=>{
@@ -32,37 +35,10 @@ export default function SideBar({handleChangeSelectedContact,selectedContact}:Si
         setSearchedContact([]);
     }
 
-    React.useEffect(()=>{
-        FetchAllConversation();
-    },[currentUserDetails])
-
     /*
         1. The Below Function fetches all the Conversation of the current User (Based on Their Email or Id)
      */
-    const FetchAllConversation = async ()=>{
-        try{
-            if(!currentUserDetails) return;
-            const userId = currentUserDetails?.user_id || currentUserDetails?.data?.user_id;
-            const response = await axios.get(`${apiBaseUrl}/conversations/${userId}`
-        )
 
-            if(response.status==200){
-                const conversationList = response?.data;
-                setSearchedContact(conversationList?.data);
-
-                const conversationMap:any = {};
-                if(conversationList?.data){
-                    for(let item of conversationList?.data){
-                        conversationMap[item?.id] = item
-                    }
-                }
-                dispatch(setConversations(conversationMap));
-            }
-        }catch(e){
-            console.error("Error in FetchAllConversation " + e);
-            return [];
-        }
-    }
 
 
  
@@ -71,7 +47,7 @@ export default function SideBar({handleChangeSelectedContact,selectedContact}:Si
         {!showSearchContact&&<SideBarSearch debounceSearch={debounceSearch} />}
         {showSearchContact && <NewChat setSearchedContact={setSearchedContact}/>}
 
-        <ContactList selectedContact={selectedContact} handleChangeSelectedContact={handleChangeSelectedContact} allUserConverations={searchedContact} /> 
+        <ContactList selectedContact={selectedContact} handleChangeSelectedContact={handleChangeSelectedContact} allUserConverations={showSearchContact ? searchedContact: conversationsData} /> 
     </>
     );
 }

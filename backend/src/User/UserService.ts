@@ -20,3 +20,18 @@ export const getUser = async (email:string) => {
     return GetReturnMessageObject(500, Status.Error,null,"Some thing went wrong!!!")
 } 
 }
+
+export const updateUserPublicKey = async (user_id:string, publicKey: string)=>{
+    try{
+
+        const response = await userRepo.UpdateUserPublicId(user_id, publicKey);
+
+        if(!response){
+            throw("Unable to Update Public Key");
+        }
+        return GetReturnMessageObject(200, Status.Success,response,"Message Fetch Succes.");
+    }catch(e){
+        console.error("Error in updateUserPublicKey " + e);
+        return GetReturnMessageObject(500, Status.Error,null,"Some thing went wrong!!!")
+    }
+}

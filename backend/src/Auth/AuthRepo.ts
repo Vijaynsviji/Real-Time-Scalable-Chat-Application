@@ -28,7 +28,8 @@ export const saveUser = async (user:userSignUp)=>{
                 first_name: user?.first_name,
                 last_name: user?.last_name,
                 email: user?.email,
-                password:  hashedPassword
+                password:  hashedPassword,
+                public_key: user?.public_key
             }
         const StringifiedResponse = JSON.stringify({
             type: "SaveUser",

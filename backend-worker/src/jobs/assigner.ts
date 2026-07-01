@@ -1,5 +1,5 @@
 import { safeJSONParse } from "../utils.js";
-import { DeleteMessageBasedOnConversationIdOrMessageId, SaveConversation, SaveNewMessageBasedOnConversationId, SaveUser, UpdateMessageBasedOnConversationIdAndMessageId } from "./jobs.js";
+import { DeleteMessageBasedOnConversationIdOrMessageId, SaveConversation, SaveNewMessageBasedOnConversationId, SaveUser, UpdateMessageBasedOnConversationIdAndMessageId, UpdateUserPublicKey } from "./jobs.js";
 
 
 
@@ -17,6 +17,7 @@ export const AssignJob = async (data:any)=>{
             case "SaveMessage": SaveNewMessageBasedOnConversationId(job?.Data);break;
             case "UpdateMessage": UpdateMessageBasedOnConversationIdAndMessageId(job?.Data);break;
             case "DeleteMessage": DeleteMessageBasedOnConversationIdOrMessageId(job?.Data);break;
+            case "UpdateUserPublicKey": UpdateUserPublicKey(job?.Data); break;
             default: return;
         }
 

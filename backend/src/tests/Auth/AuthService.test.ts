@@ -29,7 +29,9 @@ describe("Auth Service Tests", ()=>{
 
             const spy = vi.spyOn(authRepo, 'findUserPresentOrNot').mockReturnValue(new Promise((resolve)=>resolve(null)));
             const spySaveUser = vi.spyOn(authRepo, "saveUser").mockReturnValue(new Promise((resolve)=>resolve(
-                {first_name: user?.first_name,last_name: user?.last_name, email: user?.email,user_id: userID}
+                {first_name: user?.first_name,last_name: user?.last_name, email: user?.email,user_id: userID,
+                    public_key: 'public_key'
+                }
             )));
 
             const Exprected = GetReturnMessageObject(200, Status.Success,{first_name: user?.first_name, last_name: user?.last_name, email: user?.email},"SignUp Success")
@@ -53,10 +55,12 @@ describe("Auth Service Tests", ()=>{
             }
 
             const spy = vi.spyOn(authRepo, 'findUserPresentOrNot').mockResolvedValue({
-                ...user,user_id: userID, profileImageUrl: null, created_at: new Date(), 
+                ...user,user_id: userID, profileImageUrl: null, created_at: new Date(), public_key: null,
             });
             const spySaveUser = vi.spyOn(authRepo, "saveUser").mockResolvedValue(
-                {first_name: user?.first_name,last_name: user?.last_name, email: user?.email,user_id: userID}
+                {first_name: user?.first_name,last_name: user?.last_name, email: user?.email,user_id: userID,
+                    public_key: 'public_key'
+                }
             );
 
             const Exprected = GetReturnMessageObject(404, Status.Error,null,"User with given email present!");
@@ -115,7 +119,7 @@ describe("Auth Service Tests", ()=>{
             }
 
             const spy = vi.spyOn(authRepo, 'findUserPresentOrNot').mockResolvedValue({
-                 ...userInfo,password:hashedPassword,  user_id: userID, profileImageUrl: null, created_at: new Date(), 
+                 ...userInfo,password:hashedPassword,  user_id: userID, profileImageUrl: null, created_at: new Date(), public_key:"public_key"
             });
 
             const Exprected =  GetReturnMessageObject(200, Status.Success,{},"SignIn Success");
@@ -177,7 +181,7 @@ describe("Auth Service Tests", ()=>{
             }
 
             const spy = vi.spyOn(authRepo, 'findUserPresentOrNot').mockResolvedValue({
-                 ...userInfo,password:hashedPassword,  user_id: userID, profileImageUrl: null, created_at: new Date(), 
+                 ...userInfo,password:hashedPassword,  user_id: userID, profileImageUrl: null, created_at: new Date(),public_key:'public_key' 
             });
 
             const Exprected =  GetReturnMessageObject(404, Status.Error,null,"Please enter correct password!!!");

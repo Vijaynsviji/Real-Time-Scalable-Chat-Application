@@ -34,7 +34,8 @@ function NewChat({setSearchedContact}:NewChat) {
                         Name: item?.first_name,
                         unReadMessageCount: 0,
                         lastMessage: "",
-                        lastMessageDate: null
+                        lastMessageDate: null,
+                        public_key: item?.public_key
                     }
                 })
                 setSearchedContact(contactUser);

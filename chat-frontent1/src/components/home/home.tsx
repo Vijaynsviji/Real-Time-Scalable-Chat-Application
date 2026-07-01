@@ -3,14 +3,16 @@ import useVerifyUser from "../hooks/useVerifyUser";
 import MessageView from "./messageview/messageview";
 import SideBar from "./sidebar/sidebar";
 import type { Message } from "../../utils/types/Types";
-import { safeJSONParse } from "../../utils/HelperFunctions";
+import { DecryptMessage, safeJSONParse } from "../../utils/HelperFunctions";
 import type { Contact } from "./sidebar/contactlist";
 import axios from "axios";
 import { apiBaseUrl } from "../../config/api";
 import { useDispatch, useSelector } from "react-redux";
-import { setConversationMessages, setSelectedStoreContact } from "../../store/slicers/conversation";
+import { fetchConversations, setConversationMessages, setSelectedStoreContact } from "../../store/slicers/conversation";
 import {useGetSet} from 'react-use';
 import { useIsMobile } from "../hooks/useMobileView";
+
+
 
 
 export default function Home(){
@@ -18,8 +20,15 @@ export default function Home(){
     const [selectedContact,setSelectedContact] = useGetSet<Contact | null>(null);
     const [messages,setMessages] = React.useState<Message[]>([]);
      const currentUserDetails = useSelector((state:any)=> state?.user?.currentUser);
+     const status = useSelector((state:any)=>state?.user?.status);
      const dispatch = useDispatch();
      const {isMobile} = useIsMobile();
+
+    React.useEffect(()=>{
+        if(status == "succeeded"){
+            dispatch(fetchConversations() as any)
+        }  
+    },[status])
 
 
     const handleChangeSelectedContact = async (contact:Contact | null)=>{
@@ -36,7 +45,7 @@ export default function Home(){
                 })
 
                 if(response?.status){
-                    const data = response?.data;
+                    const data = response?.data?.data;
                     const conversation_id = data?.conversation_id;
                     if(!conversation_id) return;
                     setSelectedContact((prev)=>{
@@ -52,10 +61,11 @@ export default function Home(){
 
     React.useEffect(()=>{
         if(socketObject){
-            socketObject.onmessage = (e)=>{
+            socketObject.onmessage = async (e)=>{
                 const data = e?.data;
                 const parsedData = safeJSONParse<any>(data,{});
                 const MessageData = parsedData;
+
 
                 const messageObject:Message = {
                     message_id:  MessageData?.message_id,
@@ -64,8 +74,16 @@ export default function Home(){
                     status: MessageData?.status,
                     created_at: MessageData?.created_at,
                     sender_id: MessageData?.sender_id,
-                    conversation_id: MessageData?.conversation_id
+                    conversation_id: MessageData?.conversation_id,
+                    currentUserDetails: MessageData?.currentUserDetails
                 };
+
+                const DecryptedMessageText = await DecryptMessage(messageObject);
+
+                if(DecryptedMessageText){
+                    messageObject['message_encrypt'] = DecryptedMessageText;
+                }
+
 
                 const payload = {
                     conversation_id: messageObject?.conversation_id,
@@ -73,7 +91,7 @@ export default function Home(){
                 }
 
                  if(selectedContact()?.conversation_id == MessageData?.conversation_id){
-                    setMessages(prev=>[...prev,MessageData]);
+                    setMessages(prev=>[...prev,messageObject]);
                 }
 
                 dispatch(setConversationMessages(payload));

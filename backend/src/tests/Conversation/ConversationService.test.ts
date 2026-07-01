@@ -25,6 +25,7 @@ describe("Conversation Service Tests", ()=>{
             firstParticipant_id: "4",
             user_id2: "2",
             secondParticipant_id: "5",
+            public_key: "new Key"
         }
             const mockFunction = vi.spyOn(UserRepo, "checkValidUserOrNot").mockResolvedValueOnce(true).mockResolvedValueOnce(true);
 

@@ -8,10 +8,12 @@ export interface CurrentUser{
     isOnline: Status,
     privateKey?: string | null
     publicKey?: string | null,
+    first_name?: string | null
 }
 
 const initialState = {
     currentUser: {} as CurrentUser,
+    status: 'idle' as 'idle' | 'loading' | 'succeeded' | 'failed'
 }
 
 export const userSlice = createSlice({
@@ -22,9 +24,13 @@ export const userSlice = createSlice({
     setCurrentUserKeys: (state,action)=>{
       if(!action.payload) return;
       state.currentUser = {...state.currentUser, ...action.payload};
+    },
+    setCurrentUserStatus: (state, action)=>{
+      if(!action.payload) return;
+      state.status = action.payload.status;
     }
   },
 });
 
-export const { setCurrentUser,setCurrentUserKeys } = userSlice.actions;
+export const { setCurrentUser,setCurrentUserKeys,setCurrentUserStatus } = userSlice.actions;
 export default userSlice.reducer;

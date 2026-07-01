@@ -6,7 +6,7 @@ import React from "react";
 import axios, { AxiosError } from 'axios';
 import { apiBaseUrl } from "../../config/api";
 import Alert from "@mui/material/Alert";
-import { generatePrivateAndPublicKeyPair, storePrivateAndPublicKeyPair } from "../../utils/HelperFunctions";
+import { ConvertCrypotKeyToString, generatePrivateAndPublicKeyPair, storePrivateAndPublicKeyPair } from "../../utils/HelperFunctions";
 
 
 interface AuthBaseComp{
@@ -47,12 +47,23 @@ export default function AuthBaseComp({isSignUp}:AuthBaseComp){
             setIsLoading(true);
 
             let data = null;
+            let KeyPair:CryptoKeyPair | null= null;
             if(isSignUp){
+                    KeyPair = await generatePrivateAndPublicKeyPair();
+                    if(!KeyPair){
+                        throw("Unable to Create Public Key And Private Key Pair!");
+                    }
+
+                    const publicKeyToString = await ConvertCrypotKeyToString(KeyPair?.publicKey);
+                    if(!publicKeyToString){
+                        throw("Unable to Convert Public Key to Base64 String!");
+                    }
                 data = {
                     first_name: firstName,
                     last_name: lastName,
                     email: email,
-                    password: password
+                    password: password,
+                    public_key: publicKeyToString,
                 }
             }else{
                 data = {
@@ -73,9 +84,9 @@ export default function AuthBaseComp({isSignUp}:AuthBaseComp){
                 };
                 
                 if(isSignUp){
-                    const userId = res?.data?.user_id;
-                    if(!userId){
-                        handleKeyCreationAndStore(userId);
+                    const userId = res?.data?.data?.user_id;
+                    if(userId){
+                        handleKeyCreationAndStore(KeyPair);
                     }
                 }
 
@@ -98,22 +109,19 @@ export default function AuthBaseComp({isSignUp}:AuthBaseComp){
         }
     }
 
-    const handleKeyCreationAndStore = async (userId:string)=>{
+    const handleKeyCreationAndStore = async (KeyPair:CryptoKeyPair | null)=>{
         try{
-
-            const KeyPair: CryptoKeyPair | null = await generatePrivateAndPublicKeyPair();
             if(!KeyPair){
-                throw("Unable to Create Public Key And Private Key Pair!");
+                throw("Key Pair Not Found!")
             }
+            // update User Public Key Columns as Well
+            // const updatePublicKeyResponse = await axios.post(apiBaseUrl + `/user/:${userId}`,{
+            //     publicKey: publicKeyToString
+            // });
 
-            //update User Public Key Columns as Well
-            const updatePublicKeyResponse = await axios.post(apiBaseUrl + `/user/:${userId}`,{
-                publicKey: KeyPair?.publicKey
-            });
-
-            if(!updatePublicKeyResponse || updatePublicKeyResponse?.status !=200){
-                throw("Unable to Post Public Key to Backend");
-            }
+            // if(!updatePublicKeyResponse || updatePublicKeyResponse?.status !=200){
+            //     throw("Unable to Post Public Key to Backend");
+            // }
 
             const response = await storePrivateAndPublicKeyPair(KeyPair);
             if(!response){

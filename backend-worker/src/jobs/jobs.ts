@@ -10,7 +10,8 @@ export const SaveUser = async (user:any)=>{
                 first_name: user?.first_name,
                 last_name: user?.last_name,
                 email: user?.email,
-                password:  user?.password
+                password:  user?.password,
+                public_key: user?.public_key
             }
         });
         return response;
@@ -66,6 +67,7 @@ export const SaveNewMessageBasedOnConversationId = async (message:any)=>{
             data:{
                 message_id: message?.message_id,
                 cipher_key: message?.cipher_key,
+                sender_cipher_key: message?.sender_cipher_key,
                 message_encrypt: message?.message_encrypt,
                 status: message?.status,
                 sender_id: message?.sender_id,
@@ -101,6 +103,7 @@ export const UpdateMessageBasedOnConversationIdAndMessageId = async (message:any
             },
             data:{
                 cipher_key: message?.cipher_key,
+                sender_cipher_key: message?.sender_cipher_key,
                 message_encrypt: message?. message_encrypt
             }
         })
@@ -128,6 +131,25 @@ export const DeleteMessageBasedOnConversationIdOrMessageId = async (message:any)
     }catch(e){
         console.error("Error in SaveUser " + e);
         return {};
+    }
+}
+
+export const UpdateUserPublicKey = async (message: any)=>{
+    try{
+        console.log(message);
+        const UpdatedUserDetails = await prisma.user.update({
+            where: {
+                user_id: message?.user_id,
+            },
+            data: {
+                public_key: message?.publicKey,
+            }
+        })
+
+        return UpdatedUserDetails;
+    }catch(e){
+        console.error("Error in UpdateUserPublicKey " + e);
+        return;
     }
 }
 

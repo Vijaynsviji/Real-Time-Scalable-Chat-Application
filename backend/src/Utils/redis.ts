@@ -1,7 +1,7 @@
 import { createClient } from "redis";
 
 const redis = createClient({
-    url: 'redis://localhost:6381'
+    url: process.env.REDIS_URL_WORKER_FOR_MSGQUEUE ||  'redis://localhost:6381'
 });
 export async function sendMessage(data:string) {
   console.log(data);

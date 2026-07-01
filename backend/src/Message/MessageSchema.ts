@@ -9,4 +9,5 @@ export const MessageBodySchema = z.object({
     message_encrypt: z.string(),
     status: z.string(),
     sender_id:  z.string(),
+    sender_cipher_key: z.string()
 })

@@ -119,7 +119,7 @@ export const UpdateMessageText = async (req:any, res:any)=>{
             });
         }
 
-        const {message_encrypt,cipher_key} = req.body;
+        const {message_encrypt,cipher_key,sender_cipher_key} = req.body;
 
         if(!message_encrypt){
             return res.status(404).json({
@@ -133,7 +133,7 @@ export const UpdateMessageText = async (req:any, res:any)=>{
             });
         }
 
-        const UpdatedMessageResponse = await MessageService.UpdateMessageTextBasedOnMessageId(conversation_id,message_id,cipher_key,message_encrypt);
+        const UpdatedMessageResponse = await MessageService.UpdateMessageTextBasedOnMessageId(conversation_id,message_id,cipher_key,message_encrypt,sender_cipher_key);
 
         return res.status(UpdatedMessageResponse?.statusCode).json({
             message: UpdatedMessageResponse?.statusText,

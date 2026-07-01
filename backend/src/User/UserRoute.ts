@@ -6,6 +6,7 @@ const userRouter = router();
 
 
 userRouter.get("/users",userController.getUsers);
+userRouter.post("/user/:user_id",userController.updateUserPublicKey);
 
 
 export default userRouter;

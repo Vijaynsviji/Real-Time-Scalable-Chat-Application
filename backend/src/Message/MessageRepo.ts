@@ -64,6 +64,7 @@ export const SaveNewMessageBasedOnConversationId = async(conversation_id:string,
         const response = {
                 message_id: uuidv4(),
                 cipher_key: MessageData?.cipher_key,
+                sender_cipher_key: MessageData?.sender_cipher_key,
                 message_encrypt: MessageData?.message_encrypt,
                 status: MessageData?.status,
                 sender_id: MessageData?.sender_id,
@@ -84,7 +85,7 @@ export const SaveNewMessageBasedOnConversationId = async(conversation_id:string,
 }
 
 
-export const UpdateMessageBasedOnConversationIdAndMessageId = async (conversation_id:string,message_id: string,cipher_key:string,message_encrypt:string)=>{
+export const UpdateMessageBasedOnConversationIdAndMessageId = async (conversation_id:string,message_id: string,cipher_key:string,message_encrypt:string,sender_cipher_key:string)=>{
     try{
         // const updatedMessage = await prisma.messages.update({
         //     where:{
@@ -99,6 +100,7 @@ export const UpdateMessageBasedOnConversationIdAndMessageId = async (conversatio
         const response = {
                 message_id: message_id,
                 cipher_key: cipher_key,
+                sender_cipher_key: sender_cipher_key,
                 message_encrypt: message_encrypt
             }
 

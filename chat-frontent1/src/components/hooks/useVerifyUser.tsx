@@ -7,8 +7,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { apiBaseUrl, wsAPIBaseURL } from '../../config/api';
 import { useDispatch } from 'react-redux';
-import { setCurrentUser, setCurrentUserKeys, type CurrentUser } from '../../store/slicers/users';
-import { getPrivateKey, getPublicKey } from '../../utils/HelperFunctions';
+import { setCurrentUser, setCurrentUserKeys, setCurrentUserStatus, type CurrentUser } from '../../store/slicers/users';
+import { getFromKeyStore } from '../../utils/HelperFunctions';
 
 function useVerifyUser() {
 
@@ -23,7 +23,7 @@ function useVerifyUser() {
                 navigate('/signin');
                 return;
             }
-
+            dispatch(setCurrentUserStatus({status:"loading"}));
             const response = await axios.post(apiBaseUrl + "/verify",{ token: token});
 
             if(response.status!=200){
@@ -38,8 +38,8 @@ function useVerifyUser() {
             const currentUser = response?.data;
             dispatch(setCurrentUser(currentUser?.data));
 
-            const PrivateKey = await getPrivateKey();
-            const PublicKey = await getPublicKey();
+            const PrivateKey = await getFromKeyStore("publicKey");
+            const PublicKey = await getFromKeyStore("privateKey");
 
             if(!PrivateKey && !PublicKey){
                 dispatch(setCurrentUserKeys({
@@ -47,10 +47,11 @@ function useVerifyUser() {
                     privateKey: PrivateKey
                 }))
             }
-
+            dispatch(setCurrentUserStatus({status:"succeeded"}));
         }catch(e){
             console.error(e);
             navigate('/signin');
+             dispatch(setCurrentUserStatus({status:"failed"}));
             return;
         }
     }

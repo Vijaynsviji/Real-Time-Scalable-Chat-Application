@@ -31,6 +31,7 @@ export type UserMinAggregateOutputType = {
   email: string | null
   password: string | null
   profileImageUrl: string | null
+  public_key: string | null
   created_at: Date | null
 }
 
@@ -41,6 +42,7 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   password: string | null
   profileImageUrl: string | null
+  public_key: string | null
   created_at: Date | null
 }
 
@@ -51,6 +53,7 @@ export type UserCountAggregateOutputType = {
   email: number
   password: number
   profileImageUrl: number
+  public_key: number
   created_at: number
   _all: number
 }
@@ -63,6 +66,7 @@ export type UserMinAggregateInputType = {
   email?: true
   password?: true
   profileImageUrl?: true
+  public_key?: true
   created_at?: true
 }
 
@@ -73,6 +77,7 @@ export type UserMaxAggregateInputType = {
   email?: true
   password?: true
   profileImageUrl?: true
+  public_key?: true
   created_at?: true
 }
 
@@ -83,6 +88,7 @@ export type UserCountAggregateInputType = {
   email?: true
   password?: true
   profileImageUrl?: true
+  public_key?: true
   created_at?: true
   _all?: true
 }
@@ -166,6 +172,7 @@ export type UserGroupByOutputType = {
   email: string
   password: string
   profileImageUrl: string | null
+  public_key: string | null
   created_at: Date
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
@@ -197,6 +204,7 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   profileImageUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  public_key?: Prisma.StringNullableFilter<"User"> | string | null
   created_at?: Prisma.DateTimeFilter<"User"> | Date | string
   messages?: Prisma.MessagesListRelationFilter
   groupMembers?: Prisma.GroupMembersListRelationFilter
@@ -210,6 +218,7 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   profileImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  public_key?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   messages?: Prisma.MessagesOrderByRelationAggregateInput
   groupMembers?: Prisma.GroupMembersOrderByRelationAggregateInput
@@ -226,6 +235,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   last_name?: Prisma.StringNullableFilter<"User"> | string | null
   password?: Prisma.StringFilter<"User"> | string
   profileImageUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  public_key?: Prisma.StringNullableFilter<"User"> | string | null
   created_at?: Prisma.DateTimeFilter<"User"> | Date | string
   messages?: Prisma.MessagesListRelationFilter
   groupMembers?: Prisma.GroupMembersListRelationFilter
@@ -239,6 +249,7 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   profileImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  public_key?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -255,6 +266,7 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
   profileImageUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  public_key?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
@@ -265,6 +277,7 @@ export type UserCreateInput = {
   email: string
   password: string
   profileImageUrl?: string | null
+  public_key?: string | null
   created_at?: Date | string
   messages?: Prisma.MessagesCreateNestedManyWithoutUserInput
   groupMembers?: Prisma.GroupMembersCreateNestedManyWithoutGroup_userInput
@@ -278,6 +291,7 @@ export type UserUncheckedCreateInput = {
   email: string
   password: string
   profileImageUrl?: string | null
+  public_key?: string | null
   created_at?: Date | string
   messages?: Prisma.MessagesUncheckedCreateNestedManyWithoutUserInput
   groupMembers?: Prisma.GroupMembersUncheckedCreateNestedManyWithoutGroup_userInput
@@ -291,6 +305,7 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  public_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.MessagesUpdateManyWithoutUserNestedInput
   groupMembers?: Prisma.GroupMembersUpdateManyWithoutGroup_userNestedInput
@@ -304,6 +319,7 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  public_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.MessagesUncheckedUpdateManyWithoutUserNestedInput
   groupMembers?: Prisma.GroupMembersUncheckedUpdateManyWithoutGroup_userNestedInput
@@ -317,6 +333,7 @@ export type UserCreateManyInput = {
   email: string
   password: string
   profileImageUrl?: string | null
+  public_key?: string | null
   created_at?: Date | string
 }
 
@@ -327,6 +344,7 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  public_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -337,6 +355,7 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  public_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -347,6 +366,7 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   profileImageUrl?: Prisma.SortOrder
+  public_key?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
@@ -357,6 +377,7 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   profileImageUrl?: Prisma.SortOrder
+  public_key?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
@@ -367,6 +388,7 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   profileImageUrl?: Prisma.SortOrder
+  public_key?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
 
@@ -436,6 +458,7 @@ export type UserCreateWithoutGroupMembersInput = {
   email: string
   password: string
   profileImageUrl?: string | null
+  public_key?: string | null
   created_at?: Date | string
   messages?: Prisma.MessagesCreateNestedManyWithoutUserInput
   conversation_participant?: Prisma.ConversationParticipantsCreateNestedManyWithoutUserInput
@@ -448,6 +471,7 @@ export type UserUncheckedCreateWithoutGroupMembersInput = {
   email: string
   password: string
   profileImageUrl?: string | null
+  public_key?: string | null
   created_at?: Date | string
   messages?: Prisma.MessagesUncheckedCreateNestedManyWithoutUserInput
   conversation_participant?: Prisma.ConversationParticipantsUncheckedCreateNestedManyWithoutUserInput
@@ -476,6 +500,7 @@ export type UserUpdateWithoutGroupMembersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  public_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.MessagesUpdateManyWithoutUserNestedInput
   conversation_participant?: Prisma.ConversationParticipantsUpdateManyWithoutUserNestedInput
@@ -488,6 +513,7 @@ export type UserUncheckedUpdateWithoutGroupMembersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  public_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.MessagesUncheckedUpdateManyWithoutUserNestedInput
   conversation_participant?: Prisma.ConversationParticipantsUncheckedUpdateManyWithoutUserNestedInput
@@ -500,6 +526,7 @@ export type UserCreateWithoutMessagesInput = {
   email: string
   password: string
   profileImageUrl?: string | null
+  public_key?: string | null
   created_at?: Date | string
   groupMembers?: Prisma.GroupMembersCreateNestedManyWithoutGroup_userInput
   conversation_participant?: Prisma.ConversationParticipantsCreateNestedManyWithoutUserInput
@@ -512,6 +539,7 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   email: string
   password: string
   profileImageUrl?: string | null
+  public_key?: string | null
   created_at?: Date | string
   groupMembers?: Prisma.GroupMembersUncheckedCreateNestedManyWithoutGroup_userInput
   conversation_participant?: Prisma.ConversationParticipantsUncheckedCreateNestedManyWithoutUserInput
@@ -540,6 +568,7 @@ export type UserUpdateWithoutMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  public_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   groupMembers?: Prisma.GroupMembersUpdateManyWithoutGroup_userNestedInput
   conversation_participant?: Prisma.ConversationParticipantsUpdateManyWithoutUserNestedInput
@@ -552,6 +581,7 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  public_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   groupMembers?: Prisma.GroupMembersUncheckedUpdateManyWithoutGroup_userNestedInput
   conversation_participant?: Prisma.ConversationParticipantsUncheckedUpdateManyWithoutUserNestedInput
@@ -564,6 +594,7 @@ export type UserCreateWithoutConversation_participantInput = {
   email: string
   password: string
   profileImageUrl?: string | null
+  public_key?: string | null
   created_at?: Date | string
   messages?: Prisma.MessagesCreateNestedManyWithoutUserInput
   groupMembers?: Prisma.GroupMembersCreateNestedManyWithoutGroup_userInput
@@ -576,6 +607,7 @@ export type UserUncheckedCreateWithoutConversation_participantInput = {
   email: string
   password: string
   profileImageUrl?: string | null
+  public_key?: string | null
   created_at?: Date | string
   messages?: Prisma.MessagesUncheckedCreateNestedManyWithoutUserInput
   groupMembers?: Prisma.GroupMembersUncheckedCreateNestedManyWithoutGroup_userInput
@@ -604,6 +636,7 @@ export type UserUpdateWithoutConversation_participantInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  public_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.MessagesUpdateManyWithoutUserNestedInput
   groupMembers?: Prisma.GroupMembersUpdateManyWithoutGroup_userNestedInput
@@ -616,6 +649,7 @@ export type UserUncheckedUpdateWithoutConversation_participantInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  public_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.MessagesUncheckedUpdateManyWithoutUserNestedInput
   groupMembers?: Prisma.GroupMembersUncheckedUpdateManyWithoutGroup_userNestedInput
@@ -677,6 +711,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   password?: boolean
   profileImageUrl?: boolean
+  public_key?: boolean
   created_at?: boolean
   messages?: boolean | Prisma.User$messagesArgs<ExtArgs>
   groupMembers?: boolean | Prisma.User$groupMembersArgs<ExtArgs>
@@ -691,6 +726,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   password?: boolean
   profileImageUrl?: boolean
+  public_key?: boolean
   created_at?: boolean
 }, ExtArgs["result"]["user"]>
 
@@ -701,6 +737,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   password?: boolean
   profileImageUrl?: boolean
+  public_key?: boolean
   created_at?: boolean
 }, ExtArgs["result"]["user"]>
 
@@ -711,10 +748,11 @@ export type UserSelectScalar = {
   email?: boolean
   password?: boolean
   profileImageUrl?: boolean
+  public_key?: boolean
   created_at?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"user_id" | "first_name" | "last_name" | "email" | "password" | "profileImageUrl" | "created_at", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"user_id" | "first_name" | "last_name" | "email" | "password" | "profileImageUrl" | "public_key" | "created_at", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   messages?: boolean | Prisma.User$messagesArgs<ExtArgs>
   groupMembers?: boolean | Prisma.User$groupMembersArgs<ExtArgs>
@@ -738,6 +776,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     password: string
     profileImageUrl: string | null
+    public_key: string | null
     created_at: Date
   }, ExtArgs["result"]["user"]>
   composites: {}
@@ -1171,6 +1210,7 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
   readonly profileImageUrl: Prisma.FieldRef<"User", 'String'>
+  readonly public_key: Prisma.FieldRef<"User", 'String'>
   readonly created_at: Prisma.FieldRef<"User", 'DateTime'>
 }
     
